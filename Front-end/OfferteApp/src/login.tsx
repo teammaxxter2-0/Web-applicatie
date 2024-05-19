@@ -1,9 +1,10 @@
 import { useState } from 'react'
 
-import './App.css';
-import Navbar from './navbar';
+import '../App.css';
+import Navbar from '../src/navbar';
 
 import 'ngx-toastr/toastr';
+import { useNavigate } from 'react-router-dom';
 
 
 
@@ -13,15 +14,44 @@ function LogIn() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [, setIsLoading] = useState<boolean>(false);
+    const navigate = useNavigate();
 
     async function handleSubmit() {
         setIsLoading(true);
         if (username === "" || password === "") {
             alert("Fill in all fields!");
             setIsLoading(false);
-        } else {
-            alert("Not implemented yet");
         }
+        else {
+            try {
+                const response = await fetch('api/Auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ username, password })
+                });
+                if (response.ok) {
+                    const data = await response.json();
+                    localStorage.setItem("Id", data.accountId);
+                    localStorage.setItem("username", data.name);
+                    localStorage.setItem("Token", data.Token);
+
+                    navigate("..");
+                    alert("Logged in successfully!");
+                } else {
+                    alert("Email and password combination not found");
+                }
+            }
+            catch (error) {
+                console.error("Error:", error);
+                alert("Something went wrong");
+            }
+            finally {
+                setIsLoading(false);
+            }
+        }
+
     }
 
     return (
