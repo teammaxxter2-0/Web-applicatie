@@ -17,7 +17,6 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        // Tijdelijk authentication uitgezet omdat het nog niet gebruikt wordt.
         builder.Services.AddAuthentication(x =>
         {
             x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -25,7 +24,7 @@ public class Program
             x.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
         }).AddJwtBearer(x =>
         {
-            var key = Encoding.UTF8.GetBytes(builder.Configuration["AppSettings:Token"]);
+            var key = Encoding.UTF8.GetBytes(builder.Configuration["AppSettings:Token"] ?? throw new InvalidOperationException());
             x.SaveToken = true;
             x.TokenValidationParameters = new TokenValidationParameters
             {
@@ -44,7 +43,6 @@ public class Program
         builder.Services.AddSwaggerGen();
 
         builder.Services.AddControllers();
-        builder.Services.AddScoped<AccountService>();
         builder.Configuration.AddEnvironmentVariables().AddJsonFile(builder.Environment.IsDevelopment()
             ? "appsettings.development.json"
             : "appsettings.json");
@@ -54,17 +52,17 @@ public class Program
 
         builder.Services.AddCors(options =>
        {
-           options.AddPolicy("AllowSpecificOrigin", builder =>
+           options.AddDefaultPolicy(policyBuilder =>
            {
-               builder.AllowAnyOrigin()
+               policyBuilder.AllowAnyOrigin()
                       .AllowAnyHeader()
                       .AllowAnyMethod();
            });
        });
 
         var app = builder.Build();
-
-
+        
+        app.MapControllers();
 
         // Swagger documentatie alleen zichtbaar in development.
         if (app.Environment.IsDevelopment())
@@ -72,13 +70,11 @@ public class Program
             app.UseSwagger();
             app.UseSwaggerUI();
         }
-        app.UseCors("AllowSpecificOrigin");
+        app.UseCors();
         app.UseHttpsRedirection();
 
         app.UseAuthentication();
         app.UseAuthorization();
-
-        app.MapControllers();
 
         app.Run();
     }

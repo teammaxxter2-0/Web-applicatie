@@ -1,14 +1,8 @@
-import { useState } from 'react'
-
-import '../src/App.css';
-import Navbar from '../src/navbar';
-
+import {useState} from 'react'
+import './App.css';
+import Navbar from './navbar';
 import 'ngx-toastr/toastr';
-import { useNavigate } from 'react-router-dom';
-
-
-
-
+import {useNavigate} from 'react-router-dom';
 
 function LogIn() {
     const [username, setUsername] = useState("");
@@ -21,8 +15,7 @@ function LogIn() {
         const data = encoder.encode(password);
         const hash = await crypto.subtle.digest('SHA-256', data);
         const hashArray = Array.from(new Uint8Array(hash));
-        const hashHex = hashArray.map(byte => byte.toString(16).padStart(2, '0')).join('');
-        return hashHex;
+        return hashArray.map(byte => byte.toString(16).padStart(2, '0')).join('');
     }
 
     async function handleSubmit() {
