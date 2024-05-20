@@ -10,7 +10,6 @@ import "bootstrap/dist/css/bootstrap.min.css";
 //import './index.css'
 import Chatbot from './chatbot.tsx';
 import Catalog from './catalog.tsx';
-import PriceList from './pricelist.tsx';
 import Winkelwagen from './winkelwagen.tsx';
 import LogIn from './login.tsx';
 import Register from './register.tsx';
@@ -31,11 +30,6 @@ const router = createBrowserRouter([
     {
         path: "/catalog",
         element: <Catalog />,
-        errorElement: <ErrorPage />,
-    },
-    {
-        path: "/pricelist",
-        element: <PriceList />,
         errorElement: <ErrorPage />,
     },
     {
