@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import '../App.css';
+import '../src/App.css';
 import Navbar from '../src/navbar';
 
 import 'ngx-toastr/toastr';
@@ -16,6 +16,15 @@ function LogIn() {
     const [, setIsLoading] = useState<boolean>(false);
     const navigate = useNavigate();
 
+    async function hashPassword(password: string) {
+        const encoder = new TextEncoder();
+        const data = encoder.encode(password);
+        const hash = await crypto.subtle.digest('SHA-256', data);
+        const hashArray = Array.from(new Uint8Array(hash));
+        const hashHex = hashArray.map(byte => byte.toString(16).padStart(2, '0')).join('');
+        return hashHex;
+    }
+
     async function handleSubmit() {
         setIsLoading(true);
         if (username === "" || password === "") {
@@ -24,12 +33,14 @@ function LogIn() {
         }
         else {
             try {
+                const hashedPassword = await hashPassword(password);
+                console.log(hashedPassword);
                 const response = await fetch('api/Auth/login', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ username, password })
+                    body: JSON.stringify({ username, password: hashPassword.toString() })
                 });
                 if (response.ok) {
                     const data = await response.json();

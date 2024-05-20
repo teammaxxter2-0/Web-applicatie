@@ -13,23 +13,22 @@ public class AccountService : ControllerBase
         _context = context;
     }
 
-    public async Task<ActionResult<IEnumerable<Account>>> GetAllAccounts()
+    public ActionResult<IEnumerable<Account>> GetAllAccounts()
     {
         if (_context.Accounts == null)
         {
             return NotFound();
         }
-        return await _context.Accounts.ToListAsync();
+        return _context.Accounts.ToList();
     }
 
-
-    public async Task<ActionResult<Account>> GetAccountById(int id)
+    public ActionResult<Account> GetAccountById(int id)
     {
         if (_context.Accounts == null)
         {
             return NotFound();
         }
-        var account = await _context.Accounts.FindAsync(id);
+        var account = _context.Accounts.Find(id);
         if (account == null)
         {
             return NotFound();
@@ -37,22 +36,53 @@ public class AccountService : ControllerBase
         return account;
     }
 
-    public async Task<ActionResult<Account>> AddAccount(Account account)
+    public ActionResult<Account> AddAccount(Account account)
     {
         if (_context.Accounts == null)
         {
-            return Problem("Entity set 'DataContext.Accounts'  is null.");
+            return Problem("Entity set 'DataContext.Accounts' is null.");
         }
         _context.Accounts.Add(account);
-        await _context.SaveChangesAsync();
+        _context.SaveChanges();
         return CreatedAtAction(nameof(GetAccountById), new { id = account.AccountId }, account);
     }
 
-    public async Task<Account> Authenticate(string username, string password)
+    public Account Authenticate(string username, string password)
     {
         // Implement authentication logic here
-        // Example:
-        var account = await _context.Accounts.FirstOrDefaultAsync(x => x.Username == username && x.Password == password);
+        var account = _context.Accounts.FirstOrDefault(x => x.Username == username && x.Password == password);
         return account;
+    }
+
+    public bool Seed()
+    {
+        var list = new List<Account>
+        {
+            new Account()
+            {
+                Username= "test@gmail.com",
+                Password="test123",
+                PhoneNumber="06123456789"
+            }
+        };
+        foreach (var item in list)
+        {
+            if (_context.Accounts.Any(o => o.Username == item.Username))
+            {
+                _context.Accounts.Update(item);
+            }
+            else
+            {
+                _context.Accounts.Add(item);
+            }
+        }
+
+        _context.SaveChanges();
+        foreach (var item in list)
+        {
+            if (!_context.Accounts.Any(o => o.Username == item.Username))
+                return false;
+        }
+        return true;
     }
 }

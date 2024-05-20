@@ -1,5 +1,5 @@
 using System.Text;
-using Backend.Data;
+// using Backend.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +12,7 @@ namespace OfferteApp;
 
 public class Program
 {
+
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
@@ -79,13 +80,6 @@ public class Program
 
         app.MapControllers();
 
-        var db = new DatabaseContext();
-        var filled = db.Set<Account>().FirstOrDefault();
-
-        if (filled == null)
-        {
-            DBSeeding.Seed();
-        }
         app.Run();
     }
 }
