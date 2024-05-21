@@ -8,9 +8,9 @@ public class OptionService(DatabaseContext context)
 {
     public IActionResult Get()
     {
-        if (!context.Options.Any())
-            if (!Seed())
-                return new BadRequestObjectResult("There was a problem seeding the database. It's still empty.");
+        if (context.Options.Any()) return new OkObjectResult(context.Options);
+        if (!Seed())
+            return new BadRequestObjectResult("There was a problem seeding the database. It's still empty.");
         return new OkObjectResult(context.Options);
     }
 

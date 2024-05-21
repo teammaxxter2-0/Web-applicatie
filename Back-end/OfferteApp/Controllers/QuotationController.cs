@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OfferteApp.Data;
 using OfferteApp.Models;
@@ -11,6 +12,7 @@ public class QuotationController(DatabaseContext context) : ControllerBase
 {
     private readonly QuotationService _service = new(context);
 
+    [Authorize]
     [HttpGet]
     public IActionResult Get()
     {
