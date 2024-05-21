@@ -141,21 +141,13 @@ public class AccountService : ControllerBase
 
     public bool Seed()
     {
-        var list = new List<CreateUserModel>
+        var account = new CreateUserModel()
         {
-            new CreateUserModel()
-            {
-                Username= "test@gmail.com",
-                Password="test123",
-                PhoneNumber="06123456789"
-            }
+            Username = "test@gmail.com",
+            Password = "test123",
+            PhoneNumber = "06123456789"
         };
-        foreach (var item in list)
-        {
-            AddAccount(item);
-            if (!_context.Accounts.Any(o => o.Username == item.Username))
-                return false;
-        }
-        return true;
+        AddAccount(account);
+        return _context.Accounts.Any(o => o.Username == account.Username);
     }
 }
