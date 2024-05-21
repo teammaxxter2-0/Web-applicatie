@@ -24,6 +24,9 @@ function Navbar() {
                         <li className="nav-item">
                             <Link className="nav-link" to="/winkelwagen">Winkelwagen  </Link>
                         </li>
+                        <li className="nav-item">
+                             <Link className="nav-link" to="/adminpage"> Admin Page  </Link>
+                        </li>
                         
                     </ul>
                 </div>
