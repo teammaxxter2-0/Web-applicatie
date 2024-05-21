@@ -30,7 +30,7 @@ namespace Backend.Controllers
         }
 
         [HttpPost]
-        public ActionResult AddAccount(Account newAccount)
+        public ActionResult AddAccount(CreateUserModel newAccount)
         {
             return _userService.AddAccount(newAccount) ? Ok() : BadRequest();
         }

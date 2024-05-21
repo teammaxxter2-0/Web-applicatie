@@ -10,14 +10,6 @@ function LogIn() {
     const [, setIsLoading] = useState<boolean>(false);
     const navigate = useNavigate();
 
-    async function hashPassword(password: string) {
-        const encoder = new TextEncoder();
-        const data = encoder.encode(password);
-        const hash = await crypto.subtle.digest('SHA-256', data);
-        const hashArray = Array.from(new Uint8Array(hash));
-        return hashArray.map(byte => byte.toString(16).padStart(2, '0')).join('');
-    }
-
     async function handleSubmit() {
         setIsLoading(true);
         if (username === "" || password === "") {
@@ -26,22 +18,21 @@ function LogIn() {
         }
         else {
             try {
-                const hashedPassword = await hashPassword(password);
-                console.log(hashedPassword);
-                const response = await fetch('api/Auth/login', {
+                const response = await fetch('api/User/login', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ username, password: hashPassword.toString() })
+                    body: JSON.stringify({
+                        Username: username,
+                        Password: password
+                    })
                 });
                 if (response.ok) {
-                    const data = await response.json();
-                    localStorage.setItem("Id", data.accountId);
-                    localStorage.setItem("username", data.name);
-                    localStorage.setItem("Token", data.Token);
+                    const data = await response.text();
+                    localStorage.setItem("Token", data);
 
-                    navigate("..");
+                    navigate("/");
                     alert("Logged in successfully!");
                 } else {
                     alert("Email and password combination not found");

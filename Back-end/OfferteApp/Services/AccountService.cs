@@ -40,10 +40,15 @@ public class AccountService : ControllerBase
         return account;
     }
 
-    public bool AddAccount(Account account)
+    public bool AddAccount(CreateUserModel createUser)
     {
-        account.Password = HashPassword(account.Password);
-        _context.Accounts.Add(account);
+        Account acc = new Account()
+        {
+            Username = createUser.Username,
+            Password = HashPassword(createUser.Password),
+            PhoneNumber = createUser.PhoneNumber
+        };
+        _context.Accounts.Add(acc);
         return _context.SaveChanges() > 0;
     }
 

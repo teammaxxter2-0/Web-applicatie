@@ -1,9 +1,7 @@
 namespace OfferteApp.Models;
-public class LoginModel
+public class CreateUserModel
 {
-    public int AccountId { get; set; }
     public string Username { get; set; } = null!;
     public string Password { get; set; } = null!;
-    public string Token { get; set; } = null!;
-
+    public string PhoneNumber { get; set; } = null!;
 }
