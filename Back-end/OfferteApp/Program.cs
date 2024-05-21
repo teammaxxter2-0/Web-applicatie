@@ -16,6 +16,9 @@ public class Program
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
+        builder.Configuration.AddEnvironmentVariables().AddJsonFile(builder.Environment.IsDevelopment()
+            ? "appsettings.development.json"
+            : "appsettings.json");
 
         builder.Services.AddAuthentication(x =>
         {
@@ -43,9 +46,6 @@ public class Program
         builder.Services.AddSwaggerGen();
 
         builder.Services.AddControllers();
-        builder.Configuration.AddEnvironmentVariables().AddJsonFile(builder.Environment.IsDevelopment()
-            ? "appsettings.development.json"
-            : "appsettings.json");
 
         builder.Services.AddDbContext<DatabaseContext>(options =>
             options.UseNpgsql(builder.Configuration.GetConnectionString("Default")));

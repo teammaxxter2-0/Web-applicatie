@@ -49,8 +49,8 @@ public class AccountService : ControllerBase
 
     public ActionResult Authenticate(LoginDto login)
     {
-        var account = _context.Accounts.FirstOrDefault(x => x.Username == login.Username && x.Password == login.Password);
-        if (account == null && !VerifyHashedPassword(account.Password, account.Password))
+        var account = _context.Accounts.FirstOrDefault(x => x.Username == login.Username);
+        if (account == null || !VerifyHashedPassword(account.Password, login.Password))
         {
             return NotFound("Invalid credentials");
         }
@@ -66,7 +66,8 @@ public class AccountService : ControllerBase
             new Claim(ClaimTypes.Name, account.Username),
         });
 
-        var t = "jottem (placeholder haha)";
+        // deze sleutel moet eigenlijk naar appsettings
+        var t = "b0af09fef647213fcac20ffeba9abf66c0069e295f276bb7808f1c457bb64daf";
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(t));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature);
         var expiry = DateTime.Now.AddHours(1);
