@@ -62,7 +62,7 @@ public class AccountService : ControllerBase
         // Implement authentication logic here
         return Ok(CreateToken(account));
     }
-    
+
 
     private string CreateToken(Account account)
     {
@@ -91,7 +91,7 @@ public class AccountService : ControllerBase
 
         return token;
     }
-    
+
     public static string HashPassword(string password)
     {
         byte[] salt;
@@ -110,7 +110,7 @@ public class AccountService : ControllerBase
         Buffer.BlockCopy(buffer2, 0, dst, 0x11, 0x20);
         return Convert.ToBase64String(dst);
     }
-            
+
     public static bool VerifyHashedPassword(string hashedPassword, string password)
     {
         byte[] buffer4;
@@ -137,13 +137,13 @@ public class AccountService : ControllerBase
         }
         return buffer3.SequenceEqual(buffer4);
     }
-            
+
 
     public bool Seed()
     {
-        var list = new List<Account>
+        var list = new List<CreateUserModel>
         {
-            new Account()
+            new CreateUserModel()
             {
                 Username= "test@gmail.com",
                 Password="test123",
@@ -152,19 +152,7 @@ public class AccountService : ControllerBase
         };
         foreach (var item in list)
         {
-            if (_context.Accounts.Any(o => o.Username == item.Username))
-            {
-                _context.Accounts.Update(item);
-            }
-            else
-            {
-                _context.Accounts.Add(item);
-            }
-        }
-
-        _context.SaveChanges();
-        foreach (var item in list)
-        {
+            AddAccount(item);
             if (!_context.Accounts.Any(o => o.Username == item.Username))
                 return false;
         }
