@@ -1,8 +1,8 @@
 export interface Material {
     id: number
     name: string;
-    spatrand: string;
-    vensterbank: string;
+    spatrand: number;
+    vensterbank: number;
     boorgatenPerStuk: boolean;
     wcd: boolean;
     randafwerking: boolean;
@@ -13,7 +13,7 @@ export interface Material {
     uitsparingOnderbouw: number;
     uitsparingInleg: number;
     uitsparingRuw: number;
-    kraangat: number;
+    kraangat: boolean;
     zeepdispenser: number;
     boorgatenPerStukPrijs: number;
     wcdPrijs: number;
