@@ -66,11 +66,12 @@ function BerekenBlad() {
             randafwerking_prijs_totaal: bestelling.randafwerking_m * bestelling.randafwerking_prijs_per_m,
             spatrand_prijs_totaal: bestelling.spatrand_m * bestelling.spatrand_prijs_per_m,
             offerte_prijs_totaal: CalculateTotal(bestelling),
-            achterwand_prijs_totaal: bestelling.acherwand_m2 * bestelling.achterwand_prijs_per_m2
+            achterwand_prijs_totaal: bestelling.acherwand_m2 * bestelling.achterwand_prijs_per_m2,
+            vensterbank_prijs_totaal: bestelling.vensterbank_m * bestelling.vensterbank_prijs_per_m
         };
 
         setBestelling(updatedBestelling);
-    }, [bestelling?.aantal_m2, bestelling?.randafwerking_m, bestelling?.spatrand_m, bestelling?.acherwand_m2]);
+    }, [bestelling?.aantal_m2, bestelling?.randafwerking_m, bestelling?.spatrand_m, bestelling?.acherwand_m2, bestelling?.vensterbank_m]);
 
     const updateBestellingAttribute = <K extends keyof Bestelling>(key: K, value: Bestelling[K]) => {
         setBestelling(prevState => {
