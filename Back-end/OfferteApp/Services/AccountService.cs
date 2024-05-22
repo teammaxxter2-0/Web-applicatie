@@ -12,9 +12,11 @@ namespace OfferteApp.Services;
 public class AccountService : ControllerBase
 {
     private readonly DatabaseContext _context;
-    public AccountService(DatabaseContext context)
+    private readonly IConfiguration _configuration;
+    public AccountService(DatabaseContext context, IConfiguration configuration)
     {
         _context = context;
+        _configuration = configuration;
     }
 
     public ActionResult<ICollection<Account>> GetAllAccounts()
@@ -66,13 +68,14 @@ public class AccountService : ControllerBase
 
     private string CreateToken(Account account)
     {
+        var conf = new ConfigurationBuilder();
         var claims = new ClaimsIdentity(new[]
         {
             new Claim(ClaimTypes.Name, account.Username),
         });
 
         // deze sleutel moet eigenlijk naar appsettings
-        var t = "b0af09fef647213fcac20ffeba9abf66c0069e295f276bb7808f1c457bb64daf";
+        var t = _configuration["AppSettings:Token"];
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(t));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature);
         var expiry = DateTime.Now.AddHours(1);
@@ -141,21 +144,13 @@ public class AccountService : ControllerBase
 
     public bool Seed()
     {
-        var list = new List<CreateUserModel>
+        var account = new CreateUserModel()
         {
-            new CreateUserModel()
-            {
-                Username= "test@gmail.com",
-                Password="test123",
-                PhoneNumber="06123456789"
-            }
+            Username = "test@gmail.com",
+            Password = "test123",
+            PhoneNumber = "06123456789"
         };
-        foreach (var item in list)
-        {
-            AddAccount(item);
-            if (!_context.Accounts.Any(o => o.Username == item.Username))
-                return false;
-        }
-        return true;
+        AddAccount(account);
+        return _context.Accounts.Any(o => o.Username == account.Username);
     }
 }

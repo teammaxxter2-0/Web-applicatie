@@ -40,7 +40,7 @@ namespace Backend.Controllers
         {
             return _userService.Authenticate(request);
         }
-        
+
         [HttpGet]
         [Route("seed")]
         public ActionResult Seed()
