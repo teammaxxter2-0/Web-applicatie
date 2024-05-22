@@ -12,9 +12,9 @@ namespace Backend.Controllers
     {
         private readonly AccountService _userService;
 
-        public UserController(DatabaseContext context)
+        public UserController(DatabaseContext context, IConfiguration configuration)
         {
-            _userService = new(context);
+            _userService = new(context, configuration);
         }
 
         [HttpGet]
