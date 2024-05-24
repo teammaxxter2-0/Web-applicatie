@@ -41,7 +41,18 @@ public class AccountService : ControllerBase
         }
         return account;
     }
-
+    public bool Delete(int id)
+    {
+        var user = _context.Accounts.FirstOrDefault(q => q.AccountId == id);
+        if (user == null) return false;
+        _context.Accounts.Remove(user);
+        return _context.SaveChanges() > 0;
+    }
+    public bool Edit(Account acc)
+    {
+        _context.Accounts.Update(acc);
+        return _context.SaveChanges() > 0;
+    }
     public bool AddAccount(CreateUserModel createUser)
     {
         Account acc = new Account()
@@ -53,7 +64,6 @@ public class AccountService : ControllerBase
         _context.Accounts.Add(acc);
         return _context.SaveChanges() > 0;
     }
-
     public ActionResult Authenticate(LoginDto login)
     {
         var account = _context.Accounts.FirstOrDefault(x => x.Username == login.Username);

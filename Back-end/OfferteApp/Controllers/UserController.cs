@@ -40,7 +40,18 @@ namespace Backend.Controllers
         {
             return _userService.Authenticate(request);
         }
-        
+        [HttpDelete]
+        [Route("{id}")]
+        public IActionResult Delete(int id)
+        {
+            return _userService.Delete(id) ? Ok() : BadRequest();
+        }
+
+        [HttpPut]
+        public IActionResult Edit([FromBody] Account acc)
+        {
+            return _userService.Edit(acc) ? Ok() : BadRequest();
+        }
         [HttpGet]
         [Route("seed")]
         public ActionResult Seed()

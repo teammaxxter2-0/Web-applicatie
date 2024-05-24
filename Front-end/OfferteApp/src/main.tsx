@@ -15,10 +15,9 @@ import LogIn from './login.tsx';
 import Register from './register.tsx';
 import AdminSeeMaterials from './admin-see-materials.tsx';
 import AdminPage from './admin.tsx';
-import AdminSeeDetailsMaterials from './admin-see-details-materials.tsx';
+//import AdminSeeDetailsMaterials from './admin-see-details-materials.tsx';
 import AdminSeeOffertes from './admin-see-offertes.tsx';
 import AdminSeeAccounts from './admin-see-accounts.tsx';
-import AdminAddMaterial from './admin-add-material.tsx';
 
 
 const router = createBrowserRouter([
@@ -63,11 +62,6 @@ const router = createBrowserRouter([
         errorElement: <ErrorPage />,
     },
     {
-        path: "/material/:id",
-        element: <AdminSeeDetailsMaterials/>,
-        errorElement: <ErrorPage />,
-    },
-    {
         path: "/seeoffertes",
         element: <AdminSeeOffertes/>,
         errorElement: <ErrorPage />,
@@ -75,11 +69,6 @@ const router = createBrowserRouter([
     {
         path: "/accounts",
         element: <AdminSeeAccounts/>,
-        errorElement: <ErrorPage />,
-    },
-    {
-        path: "/addmaterial",
-        element: <AdminAddMaterial/>,
         errorElement: <ErrorPage />,
     },
 

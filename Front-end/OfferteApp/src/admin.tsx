@@ -1,19 +1,41 @@
 
-import { Link } from 'react-router-dom';
+
 import Navbar from './navbar';
+import { useNavigate } from 'react-router-dom';
+import { Card, Button } from 'antd';
 
 function AdminPage() {
-   
+    const navigate = useNavigate();
     return (
         <>
             <Navbar />
-            <h1>Admin Page</h1>
-            <p> miscchien winkelwagen hier idk</p>
-             <Link className="nav-link" to="/seematerials">Click to see materials </Link>
-            <p> <Link className="nav-link" to="/seeoffertes"> Click tosee offertes </Link></p>
-        
-                       
-                                             
+            <div className="d-flex justify-content-center mt-5">
+                <Card
+                    title="Welkom, Admin"
+                    bordered={true}
+                    className="w-75"
+                    style={{ maxWidth: '600px' }}
+                >
+                    <div className="mb-5">
+                        <Button  block onClick={() => navigate('/seematerials')}>
+                            Klik hier om naar <strong> materialen </strong> te gaan
+                        </Button>
+                    </div>
+                    <div className="mb-5">
+                        <Button  block onClick={() => navigate('/accounts')}>
+                            Klik hier om naar <strong> accounts </strong> te gaan
+                        </Button>
+                    </div>
+                    <div className="mb-5">
+                        <Button  block onClick={() => navigate('/seeoffertes')}>
+                            NIET KLAAR: Klik hier om naar <strong> offertes </strong> te gaan
+                        </Button>
+                    </div>
+                </Card>
+            </div>
+
+
+
         </>
     );
 }
