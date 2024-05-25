@@ -13,7 +13,7 @@ export interface Material {
     uitsparingOnderbouw: number;
     uitsparingInleg: number;
     uitsparingRuw: number;
-    kraangat: boolean;
+    kraangat: number;
     zeepdispenser: number;
     boorgatenPerStukPrijs: number;
     wcdPrijs: number;
