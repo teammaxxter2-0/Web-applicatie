@@ -5,7 +5,8 @@ import useOptions from "../hooks/Options.tsx";
 import { Bestelling } from "../types/Bestelling.ts";
 import TableView from "../Components/TableView.tsx";
 import CalculateTotal from "../Components/CalculateTotal.tsx";
-import {Material} from "../types/Materiaalsoort.ts";
+import { Material } from "../types/Materiaalsoort.ts";
+import "../Styles/berekenblad.css";
 
 function BerekenBlad() {
     const params = useParams();
@@ -101,7 +102,6 @@ function BerekenBlad() {
                         <h1>Bereken uw keukenblad</h1>
                         <form onSubmit={handleBestelling}>
                             <label>Materiaal: {bestelling?.name}</label>
-                            <br/>
                             <label>
                                 Voer het aantal vierkante meters in:
                                 <input
@@ -112,7 +112,6 @@ function BerekenBlad() {
                                     step="0.01"
                                 />
                             </label>
-                            <br/>
                             {bestelling?.randafwerking && (
                                 <label>
                                     Voer het aantal meters randafwerking in:
@@ -125,7 +124,6 @@ function BerekenBlad() {
                                     />
                                 </label>
                             )}
-                            <br/>
                             {bestelling?.randafwerking && (
                                 <label>
                                     Voer de hoogte van de randafwerking in (mm):
@@ -138,7 +136,6 @@ function BerekenBlad() {
                                     />
                                 </label>
                             )}
-                            <br/>
                             <label>
                                 Voer het aantal meters spatrand in:
                                 <input
@@ -149,7 +146,6 @@ function BerekenBlad() {
                                     step="0.01"
                                 />
                             </label>
-                            <br/>
                             <label>
                                 Voer de hoogte van de spatrand in (mm) (tussen 0 en 150):
                                 <input
@@ -161,7 +157,6 @@ function BerekenBlad() {
                                     step="1"
                                 />
                             </label>
-                            <br/>
                             <label>
                                 Voer het aantal meters vensterbank in:
                                 <input
@@ -172,7 +167,6 @@ function BerekenBlad() {
                                     step="0.01"
                                 />
                             </label>
-                            <br/>
                             <label>
                                 Voer de breedte van de vensterbank in (mm):
                                 <input
@@ -183,7 +177,6 @@ function BerekenBlad() {
                                     step="1"
                                 />
                             </label>
-                            <br/>
                             <label>
                                 Wilt u een spoelbak?
                                 <select
@@ -194,7 +187,6 @@ function BerekenBlad() {
                                     <option value="nee">Nee</option>
                                 </select>
                             </label>
-                            <br/>
                             <label>
                                 Wilt u een kraangat?
                                 <select
@@ -205,7 +197,6 @@ function BerekenBlad() {
                                     <option value="nee">Nee</option>
                                 </select>
                             </label>
-                            <br/>
                             <label>
                                 Wilt u een zeepdispenser?
                                 <select
@@ -216,7 +207,6 @@ function BerekenBlad() {
                                     <option value="nee">Nee</option>
                                 </select>
                             </label>
-                            <br/>
                             {bestelling?.boorgaten && (
                                 <>
                                     <label>
@@ -229,7 +219,6 @@ function BerekenBlad() {
                                             step="1"
                                         />
                                     </label>
-                                    <br/>
                                     <label>
                                         Voer de diameter van de boorgaten in (mm):
                                         <input
@@ -242,7 +231,6 @@ function BerekenBlad() {
                                     </label>
                                 </>
                             )}
-                            <br/>
                             {material?.wcd && (
                                 <label>
                                     Wilt u een contactdoos?

@@ -1,4 +1,4 @@
-import {useState} from 'react'
+import React, {useState} from 'react'
 import '../Styles/App.css';
 import Navbar from '../Components/Navbar.tsx';
 import 'ngx-toastr/toastr';
@@ -60,23 +60,23 @@ function LogIn() {
                         <div className="card">
                             <div className="row g-0">
                                 <div className="col-md-8 col-lg-8">
-                                    <img src="../blis.webp"
+                                    <img src="../assets/blis.webp"
                                         alt="login picture" className="img-fluid w-100" />
                                 </div>
                                 <div className="col-md-6 col-lg-4">
                                     <div className="card-body p-4 p-lg-7 text-black">
                                         <form onSubmit={handleSubmit}>
                                             <h1 className="mb-4">Log in</h1>
-                                            <div data-mdb-input-init className="form-outline mb-4">
+                                            <div className="form-outline mb-4">
                                                 <input type="email" id="form2Example17" className="form-control form-control-lg" onChange={(e) => setUsername(e.currentTarget.value)} />
                                                 <label className="form-label" htmlFor="form2Example17">Gebruikersnaam</label>
                                             </div>
-                                            <div data-mdb-input-init className="form-outline mb-4">
+                                            <div className="form-outline mb-4">
                                                 <input type="password" id="form2Example27" className="form-control form-control-lg" onChange={(e) => setPassword(e.currentTarget.value)} />
                                                 <label className="form-label" htmlFor="form2Example27">Wachtwoord</label>
                                             </div>
                                             <div className="pt-1 mb-4">
-                                                <button data-mdb-button-init data-mdb-ripple-init className="btn btn-dark btn-lg btn-block" type="submit">Inloggen</button>
+                                                <button className="btn btn-dark btn-lg btn-block" type="submit">Inloggen</button>
                                             </div>
 
                                         </form>

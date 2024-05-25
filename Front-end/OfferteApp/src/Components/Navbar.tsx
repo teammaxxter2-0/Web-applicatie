@@ -11,8 +11,6 @@ function Navbar() {
     return (
         <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
             <div className="container">
-
-
                 <div className="collapse navbar-collapse" id="navbarNav">
                     <ul className="navbar-nav ml-auto">
                         <li className="nav-item">
@@ -33,7 +31,6 @@ function Navbar() {
                           <Button className="nav-link" onClick={logout}>Logout</Button>
                         </li>
                         }
-
                     </ul>
                 </div>
             </div>
