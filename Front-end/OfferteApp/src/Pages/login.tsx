@@ -1,8 +1,8 @@
-import { useState } from 'react'
-import './App.css';
-import Navbar from './navbar';
+import {useState} from 'react'
+import '../Styles/App.css';
+import Navbar from '../Components/Navbar.tsx';
 import 'ngx-toastr/toastr';
-import { useNavigate } from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 
 function LogIn() {
     const [username, setUsername] = useState("");
