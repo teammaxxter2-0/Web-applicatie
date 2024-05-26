@@ -1,17 +1,18 @@
 import {Material} from "../types/Materiaalsoort.ts";
 import {useEffect, useState} from "react";
 
-function useOptions() {
-    const [data, setData] = useState<Material[]>([]);
+function useOptions(): Material[];
+function useOptions(id: string): Material;
+function useOptions(id?: string): Material | Material[] {
+    const [data, setData] = useState<Material | Material[]>(id ? {} as Material : []);
+
     useEffect(() => {
-        fetch("/api/Options")
-            .then(res => {
-                res.json()
-                    .then(data => {
-                        setData(data);
-                    })
-            });
-    }, []);
+        const url = id ? `/api/Options/${id}` : "/api/Options";
+        fetch(url)
+            .then(res => res.json())
+            .then(data => setData(data));
+    }, [id]);
+
     return data;
 }
 

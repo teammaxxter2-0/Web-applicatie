@@ -7,60 +7,55 @@ import TableView from "../Components/TableView.tsx";
 import CalculateTotal from "../Components/CalculateTotal.tsx";
 import { Material } from "../types/Materiaalsoort.ts";
 import "../Styles/berekenblad.css";
+import MakeQuote from "../hooks/MakeQuote.ts";
 
 function BerekenBlad() {
-    const params = useParams();
-    const options = useOptions();
+    const params = useParams<{ id: string }>();
     const [bestelling, setBestelling] = useState<Bestelling>();
-    const [material, setMaterial] = useState<Material>();
+    const material: Material = useOptions(params.id ?? "");
 
     useEffect(() => {
         if (params === undefined || params.id === undefined) return;
 
-        const new_material = options.find(o => o.id === parseInt(params.id as string));
-        if (new_material === undefined) return;
-
-        setMaterial(new_material);
-
         setBestelling({
-            name: new_material.name,
+            name: material.name,
             aantal_m2: 0,
-            prijs_per_m2: new_material.prijsPerM2,
+            prijs_per_m2: material.prijsPerM2,
             prijs_m2_totaal: 0,
-            randafwerking: new_material.randafwerking,
+            randafwerking: material.randafwerking,
             randafwerking_m: 0,
-            randafwerking_prijs_per_m: new_material.randafwerkingPerM,
+            randafwerking_prijs_per_m: material.randafwerkingPerM,
             randafwerking_hoogte_mm: 0,
             randafwerking_prijs_totaal: 0,
             spatrand_m: 0,
-            spatrand_prijs_per_m: new_material.spatrandPerM,
+            spatrand_prijs_per_m: material.spatrandPerM,
             spatrand_hoogte_mm: 0,
             spatrand_prijs_totaal: 0,
             vensterbank_m: 0,
-            vensterbank_prijs_per_m: new_material.vensterbankPerM,
+            vensterbank_prijs_per_m: material.vensterbankPerM,
             vensterbank_breedte_mm: 0,
             vensterbank_prijs_totaal: 0,
             spoelbak: false,
             uitsparing_spoelbak: "Ok",
             spoelbak_prijs: 12.6,
             kraangat: false,
-            kraangat_prijs: new_material.kraangat,
+            kraangat_prijs: material.kraangat,
             zeepdispenser: false,
-            zeepdispenser_prijs: new_material.zeepdispenser,
-            boorgaten: new_material.boorgatenPerStuk,
+            zeepdispenser_prijs: material.zeepdispenser,
+            boorgaten: material.boorgatenPerStuk,
             boorgaten_stuk: 0,
             boorgaten_mm: 0,
-            boorgaten_prijs_per_stuk: new_material.boorgatenPerStukPrijs,
+            boorgaten_prijs_per_stuk: material.boorgatenPerStukPrijs,
             bootgaten_prijs_totaal: 0,
             WCD: false,
-            WCD_prijs: new_material.wcdPrijs,
+            WCD_prijs: material.wcdPrijs,
             achterwand: false,
             acherwand_m2: 0,
-            achterwand_prijs_per_m2: new_material.achterwandPerM,
+            achterwand_prijs_per_m2: material.achterwandPerM,
             achterwand_prijs_totaal: 0,
             offerte_prijs_totaal: 0
         });
-    }, [params, options]);
+    }, [params, material]);
 
     useEffect(() => {
         if (!bestelling) return;
@@ -90,7 +85,10 @@ function BerekenBlad() {
     const handleBestelling = (e: React.FormEvent) => {
         e.preventDefault();
 
-        console.log('Bestelling:', bestelling);
+        if(bestelling !== undefined)
+            MakeQuote(bestelling);
+        else
+            alert('Bestelling bestaat niet');
     }
 
     return (
@@ -253,7 +251,7 @@ function BerekenBlad() {
                                     step="0.01"
                                 />
                             </label>
-
+                            <button type={"submit"}>Vraag aan</button>
                         </form>
                     </div>
                     <div className={"col-sm"}>

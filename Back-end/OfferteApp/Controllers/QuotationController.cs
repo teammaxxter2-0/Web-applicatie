@@ -20,17 +20,19 @@ public class QuotationController(DatabaseContext context) : ControllerBase
     }
 
     [HttpPost]
-    public IActionResult Create([FromBody] Quotation quote)
+    public IActionResult Create([FromBody]NewQuotation quote)
     {
-        return _service.Create(quote) ? Ok() : BadRequest();
+        return _service.Create(quote) ? Ok(quote) : BadRequest();
     }
 
+    [Authorize]
     [HttpPut]
     public IActionResult Edit([FromBody] Quotation quote)
     {
         return _service.Edit(quote) ? Ok() : BadRequest();
     }
 
+    [Authorize]
     [HttpDelete]
     [Route("{id}")]
     public IActionResult Delete(int id)
