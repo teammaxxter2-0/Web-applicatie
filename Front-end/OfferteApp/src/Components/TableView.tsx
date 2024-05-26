@@ -23,7 +23,15 @@ const TableView: React.FC<Props> = ({viewObject}) => {
             {Object.entries(viewObject).map(([label, value], index) => (
                 <tr key={index}>
                     <td>{label}</td>
-                    <td>{value !== undefined ? (typeof value === 'boolean' ? (value ? "Ja" : "Nee") : value) : "Undefined"}</td>
+                    <td>{value !== undefined
+                        ? typeof value === "boolean"
+                            ? value
+                                ? "Ja"
+                                : "Nee"
+                            : typeof value === "number" && isNaN(value)
+                                ? "0"
+                                : value
+                        : "Undefined"}</td>
                 </tr>
             ))}
             </tbody>
