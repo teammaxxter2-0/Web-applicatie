@@ -78,13 +78,11 @@ public class AccountService : ControllerBase
 
     private string CreateToken(Account account)
     {
-        var conf = new ConfigurationBuilder();
         var claims = new ClaimsIdentity(new[]
         {
             new Claim(ClaimTypes.Name, account.Username),
         });
 
-        // deze sleutel moet eigenlijk naar appsettings
         var t = _configuration["AppSettings:Token"];
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(t));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature);
@@ -105,7 +103,7 @@ public class AccountService : ControllerBase
         return token;
     }
 
-    public static string HashPassword(string password)
+    private static string HashPassword(string password)
     {
         byte[] salt;
         byte[] buffer2;
@@ -124,7 +122,7 @@ public class AccountService : ControllerBase
         return Convert.ToBase64String(dst);
     }
 
-    public static bool VerifyHashedPassword(string hashedPassword, string password)
+    private static bool VerifyHashedPassword(string hashedPassword, string password)
     {
         byte[] buffer4;
         if (hashedPassword == null)

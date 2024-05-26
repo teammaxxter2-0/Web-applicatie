@@ -3,17 +3,17 @@ import { Collapse, CardBody, Card, Button, Input } from 'reactstrap';
 import { BsCaretDownSquareFill } from "react-icons/bs";
 import { FaXmark } from "react-icons/fa6";
 import { GiCheckMark } from "react-icons/gi";
-import { Link } from 'react-router-dom';
-import Navbar from './navbar';
-import useOptions from "./hooks/Options.tsx";
+import Navbar from '../Components/Navbar.tsx';
+import useOptions from "../hooks/Options.tsx";
 
-import image1 from './assets/Material Images/noble_carrara_verzoet.png';
-import image2 from './assets/Material Images/noble_desiree_grey_matt.png';
-import image3 from './assets/Material Images/taurus_terazzo_black.png';
-import image4 from './assets/Material Images/taurus_terazzo_white_verzoet.png';
-import image5 from './assets/Material Images/glencoe_verzoet.png';
+import image1 from '../assets/Material Images/noble_carrara_verzoet.png';
+import image2 from '../assets/Material Images/noble_desiree_grey_matt.png';
+import image3 from '../assets/Material Images/taurus_terazzo_black.png';
+import image4 from '../assets/Material Images/taurus_terazzo_white_verzoet.png';
+import image5 from '../assets/Material Images/glencoe_verzoet.png';
 
-import blisImage from './assets/Material Images/blis.png';
+import blisImage from '../assets/Material Images/blis.png';
+import {Link} from "react-router-dom";
 
 const imageMap: { [key: string]: string } = {
     "Noble Desiree Grey Matt": image2,
@@ -111,7 +111,7 @@ function Catalog() {
                                                 <div className="col">{rectangle.name}</div>
                                                 <div className="w-100"></div>
                                                 <div className="mt-2 d-flex justify-content-end">
-                                                    <Link to="/new">
+                                                    <Link to={`/berekenblad/${rectangle.id}`}>
                                                         <Button color="primary">Bereken jouw keukenblad</Button>
                                                     </Link>
                                                 </div>

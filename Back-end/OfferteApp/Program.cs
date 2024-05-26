@@ -1,12 +1,8 @@
 using System.Text;
-// using Backend.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using OfferteApp.Data;
-using OfferteApp.Models;
-using OfferteApp.Services;
 
 namespace OfferteApp;
 
