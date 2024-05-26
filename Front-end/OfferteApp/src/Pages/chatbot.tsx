@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Navbar from '../Components/Navbar.tsx';
 import { marked } from "marked";
 import sanitizeHtml from "sanitize-html";
-import {Bestelling} from "../types/Bestelling.ts";
+import { Bestelling } from "../types/Bestelling.ts";
 import TableView from "../Components/TableView.tsx";
 
 function Chatbot() {
@@ -16,7 +16,10 @@ function Chatbot() {
         e.preventDefault();
         appendUserMessage(inputValue);
         setInputValue('');
-        const response = await fetch('ai/send', {
+
+        const threadId = localStorage.getItem('threadId');
+        const url = threadId ? `ai/chat/${threadId}` : 'ai/chat';
+        const response = await fetch(url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -24,9 +27,13 @@ function Chatbot() {
             body: JSON.stringify({ data: inputValue })
         });
         if (response.ok) {
-            const jsonResponse = await response.json();
-            appendBotMessage(jsonResponse.message);
-            updateInfoTable(jsonResponse.materiaalInformatie);
+            const assistant = await response.json();
+            const message = JSON.parse(assistant.message);
+            appendBotMessage(message.assistant.message);
+            updateInfoTable(message.materiaalInformatie);
+            if (assistant.threadId !== undefined) {
+                localStorage.setItem('threadId', assistant.threadId);
+            }
         } else {
             appendBotMessage('Failed to send data');
         }
