@@ -17,7 +17,7 @@ export interface Bestelling {
     vensterbank_breedte_mm: number,
     vensterbank_prijs_totaal: number,
     spoelbak: boolean,
-    uitsparing_spoelbak: boolean,
+    uitsparing_spoelbak: string,
     spoelbak_prijs: number,
     kraangat: boolean,
     kraangat_prijs: number,
