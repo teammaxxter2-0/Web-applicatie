@@ -3,7 +3,7 @@ import { SearchOutlined, EditOutlined, DeleteOutlined, LoadingOutlined, InfoCirc
 import { Button, Input, Space, Table, message, Popconfirm, InputNumber, Modal, Form, Checkbox } from 'antd';
 import type { InputRef, TableColumnsType, TableColumnType } from 'antd';
 import type { FilterDropdownProps } from 'antd/es/table/interface';
-import Navbar from './navbar';
+import Navbar from './Components/Navbar.tsx';
 import { useNavigate } from 'react-router-dom';
 import { Option } from './interfaces/Options';
 

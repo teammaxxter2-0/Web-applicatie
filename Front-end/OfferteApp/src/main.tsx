@@ -13,7 +13,10 @@ import Catalog from './Pages/catalog.tsx';
 import Winkelwagen from './Pages/winkelwagen.tsx';
 import LogIn from './Pages/login.tsx';
 import BerekenBlad from "./Pages/Berekenblad.tsx";
-
+import AdminSeeMaterials from './admin-see-materials.tsx';
+import AdminPage from './admin.tsx';
+import AdminSeeOffertes from './admin-see-offertes.tsx';
+import AdminSeeAccounts from './admin-see-accounts.tsx';
 
 const router = createBrowserRouter([
     {
@@ -45,7 +48,27 @@ const router = createBrowserRouter([
         path: "/berekenblad/:id",
         element: <BerekenBlad />,
         errorElement: <ErrorPage />,
-    }
+    },
+    {
+        path: "/adminpage",
+        element: <AdminPage />,
+        errorElement: <ErrorPage />,
+    },
+    {
+        path: "/seematerials",
+        element: <AdminSeeMaterials/>,
+        errorElement: <ErrorPage />,
+    },
+    {
+        path: "/seeoffertes",
+        element: <AdminSeeOffertes/>,
+        errorElement: <ErrorPage />,
+    },
+    {
+        path: "/accounts",
+        element: <AdminSeeAccounts/>,
+        errorElement: <ErrorPage />,
+    },
 
 
 ]);

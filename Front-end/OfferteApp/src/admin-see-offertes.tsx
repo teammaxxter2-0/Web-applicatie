@@ -1,18 +1,33 @@
 
-
-import { useRef, useState } from 'react';
+import { useRef, useState ,} from 'react';
 import { SearchOutlined , FormOutlined, DeleteOutlined} from '@ant-design/icons';
 import { Button, Input, Space, Table } from 'antd';
 import type { InputRef, TableColumnsType, TableColumnType } from 'antd';
 import type { FilterDropdownProps } from 'antd/es/table/interface';
-import Navbar from './navbar';
+import Navbar from './Components/Navbar.tsx';
 import {  useNavigate } from 'react-router-dom';
+import { jsPDF } from 'jspdf';
+
+
 
 interface Rectangle {
     id: number;
     date: Date;
     user: string;
   }
+  const generatePDF = () => {
+    const doc = new jsPDF();
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(20);
+    doc.setTextColor(40, 40, 40);
+    doc.text("Offerte  van [GEBRUIKER]", 10, 20);
+
+    
+
+    
+    doc.save("Offerte.pdf");
+  };
+
   
   const rectanglesData: Rectangle[] = [
     { id: 1, date: new Date('2024-01-01T10:00:00'), user: 'User1' },
@@ -149,6 +164,7 @@ function AdminSeeOffertes() {
           <h1> Offertes: </h1>
           <Table columns={columns} dataSource={rectanglesData} pagination={{ pageSize: 7 }} />
         </div>
+        
       </>
     );
   }

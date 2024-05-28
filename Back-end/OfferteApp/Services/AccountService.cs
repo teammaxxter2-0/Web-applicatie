@@ -43,7 +43,7 @@ public class AccountService : ControllerBase
     }
     public bool Delete(int id)
     {
-        var user = _context.Accounts.FirstOrDefault(q => q.AccountId == id);
+        var user = _context.Accounts.FirstOrDefault(q => q.Id == id);
         if (user == null) return false;
         _context.Accounts.Remove(user);
         return _context.SaveChanges() > 0;

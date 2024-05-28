@@ -1,6 +1,6 @@
 
 
-import Navbar from './navbar';
+import Navbar from './Components/Navbar.tsx';
 import { useNavigate } from 'react-router-dom';
 import { Card, Button } from 'antd';
 

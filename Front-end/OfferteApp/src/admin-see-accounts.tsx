@@ -3,7 +3,7 @@ import { SearchOutlined, EditOutlined, DeleteOutlined, LoadingOutlined, InfoCirc
 import { Button, Input, Space, Table, message, Popconfirm, Modal, Form } from 'antd';
 import type { InputRef, TableColumnsType, TableColumnType } from 'antd';
 import type { FilterDropdownProps } from 'antd/es/table/interface';
-import Navbar from './navbar';
+import Navbar from './Components/Navbar.tsx';
 import { useNavigate } from 'react-router-dom';
 import { User } from './interfaces/Users';
 
@@ -121,7 +121,7 @@ function AdminSeeAccounts() {
       });
 
       if (response.ok) {
-        setUsers(users.filter((user) => user.accountId !== id));
+        setUsers(users.filter((user) => user.id !== id));
         message.success('Account succesvol verwijderd!');
       } else {
         message.error('Gefaald om de Account te verwijderen.');
@@ -165,7 +165,7 @@ function AdminSeeAccounts() {
       });
 
       if (response.ok) {
-        setUsers(users.map(user => user.accountId === selectedUser?.accountId ? { ...selectedUser, ...values } : user));
+        setUsers(users.map(user => user.id === selectedUser?.id ? { ...selectedUser, ...values } : user));
         message.success('Veranderingen succesvol opgeslagen');
         handleEditModalClose();
         form.resetFields();
@@ -208,10 +208,10 @@ function AdminSeeAccounts() {
   const columns: TableColumnsType<User> = [
     {
       title: 'Id',
-      dataIndex: 'accountId',
+      dataIndex: 'id',
       key: 'id',
       width: '30%',
-      ...getColumnSearchProps('accountId'),
+      ...getColumnSearchProps('id'),
     },
     {
       title: 'Gebruikersnaam',
@@ -244,7 +244,7 @@ function AdminSeeAccounts() {
           <Button type="link" onClick={() => handleEdit(record)}> <EditOutlined /></Button>
           <Popconfirm 
           title="Wil je het zeker verwijderen?" 
-          onConfirm={() => handleDelete(record.accountId)} 
+          onConfirm={() => handleDelete(record.id)} 
           okText="Ja"
           cancelText="Nee">
              <DeleteOutlined />
@@ -290,7 +290,7 @@ function AdminSeeAccounts() {
       >
         {selectedUser && (
           <div>
-            <p><strong>Id:</strong> {selectedUser.accountId}</p>
+            <p><strong>Id:</strong> {selectedUser.id}</p>
             <p><strong>Gebruikersnaam:</strong> {selectedUser.userName}</p>
             <p><strong>Wachtwoord:</strong> {selectedUser.password}</p>
             <p><strong>Telefoon Nummer:</strong> {selectedUser.phoneNumber}</p>
@@ -314,7 +314,7 @@ function AdminSeeAccounts() {
       >
         {selectedUser && (
           <Form form={form} layout="vertical">
-            <Form.Item name="accountId" label="Id">
+            <Form.Item name="id" label="Id">
               <Input disabled />
             </Form.Item>
             <Form.Item name="username" label="Gebruikersnaam" rules={[{ required: true, message: 'Voer de Gebruiker!' }]}>

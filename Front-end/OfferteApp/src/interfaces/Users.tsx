@@ -1,5 +1,5 @@
 export interface User {
-  accountId: number;
+  id: number;
   userName: string;
   password: string;
   phoneNumber: string;
