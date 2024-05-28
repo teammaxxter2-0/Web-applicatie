@@ -23,7 +23,7 @@ public class Program
             x.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
         }).AddJwtBearer(x =>
         {
-            var key = Encoding.UTF8.GetBytes(builder.Configuration["AppSettings:Token"] ?? throw new InvalidOperationException());
+            var key = Encoding.UTF8.GetBytes(builder.Configuration["Token"] ?? throw new InvalidOperationException());
             x.SaveToken = true;
             x.TokenValidationParameters = new TokenValidationParameters
             {

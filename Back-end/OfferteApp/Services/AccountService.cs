@@ -83,7 +83,7 @@ public class AccountService : ControllerBase
             new Claim(ClaimTypes.Name, account.Username),
         });
 
-        var t = _configuration["AppSettings:Token"];
+        var t = _configuration["Token"];
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(t));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature);
         var expiry = DateTime.Now.AddHours(1);

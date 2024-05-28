@@ -20,7 +20,8 @@ interface Rectangle {
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(20);
     doc.setTextColor(40, 40, 40);
-    doc.text("Offerte  van [GEBRUIKER]", 10, 20);
+    doc.text("Offerte  van [GEBRUIKER luuk]", 10, 20);
+    doc.text(rectanglesData[1].user, 10 ,30);
 
     
 
@@ -164,7 +165,7 @@ function AdminSeeOffertes() {
           <h1> Offertes: </h1>
           <Table columns={columns} dataSource={rectanglesData} pagination={{ pageSize: 7 }} />
         </div>
-        
+        <Button type="link" onClick={() => generatePDF()}> KLICK</Button>
       </>
     );
   }
