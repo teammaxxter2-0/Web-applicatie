@@ -1,7 +1,7 @@
-import {useState} from 'react';
-import Navbar from './navbar';
-import {Material} from "./types/Materiaalsoort.ts";
-import useOptions from "./hooks/Options.tsx";
+import { useState } from 'react';
+import Navbar from '../Components/Navbar.tsx';
+import { Material } from "../interfaces/Materiaalsoort.ts";
+import useOptions from "../hooks/Options.ts";
 
 function Winkelwagen() {
     const materials = useOptions();
@@ -14,12 +14,11 @@ function Winkelwagen() {
 
     return (
         <>
-            <Navbar/>
+            <Navbar />
             <h1>Winkelwagen</h1>
             <div className="inputTable">
-                <h3>InputTable</h3>
                 <select onChange={handleselectchangeMeteriaal}>
-                    <option value="">Select Material</option>
+                    <option value="">Selecteer Materiaal</option>
                     {materials.map(material => (
                         <option key={material.id} value={material.id}>
                             {material.name}
@@ -29,16 +28,16 @@ function Winkelwagen() {
                 {Materiaal && (
                     <table>
                         <thead>
-                        <tr>
-                            <th>Label</th>
-                            <th>Waarde</th>
-                        </tr>
+                            <tr>
+                                <th>Label</th>
+                                <th>Waarde</th>
+                            </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                            <td>{Materiaal.name}</td>
-                            <td>{Materiaal.prijsPerM2}</td>
-                        </tr>
+                            <tr>
+                                <td>{Materiaal.name}</td>
+                                <td>{Materiaal.prijsPerM2}</td>
+                            </tr>
                         </tbody>
                     </table>
                 )}

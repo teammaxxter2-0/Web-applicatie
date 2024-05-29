@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OfferteApp.Data;
 using OfferteApp.Models;
@@ -23,25 +24,28 @@ public class OptionsController(DatabaseContext context): ControllerBase
         return _service.GetOne(id);
     }
 
+    [Authorize]
     [HttpPost]
     public IActionResult Create([FromBody] Option quote)
     {
         return _service.Create(quote) ? Ok() : BadRequest();
     }
 
+    [Authorize]
     [HttpPut]
     public IActionResult Edit([FromBody] Option quote)
     {
         return _service.Edit(quote) ? Ok() : BadRequest();
     }
 
+    [Authorize]
     [HttpDelete]
     [Route("{id}")]
     public IActionResult Delete(int id)
     {
         return _service.Delete(id) ? Ok() : BadRequest();
     }
-
+    
     [HttpGet]
     [Route("seed")]
     public IActionResult Seed()

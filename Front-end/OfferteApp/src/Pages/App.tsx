@@ -1,7 +1,5 @@
-
-
-import './App.css';
-import Navbar from './navbar';
+import '../Styles/App.css';
+import Navbar from '../Components/Navbar.tsx';
 
 function App() {
     
@@ -9,8 +7,7 @@ function App() {
         <>
            <Navbar />
             <h1>Blis Digital</h1>
-           
-            
+
             <li>
                 <a href={`/chatbot`}>Chat bot</a>
             </li>
@@ -20,10 +17,6 @@ function App() {
             <li>
                 <a href={`/pricelist`}>Price list</a>
             </li>
-            
-           
-            
-            
         </>
     );
 }

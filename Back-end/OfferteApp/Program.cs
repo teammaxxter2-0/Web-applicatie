@@ -1,12 +1,8 @@
 using System.Text;
-// using Backend.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using OfferteApp.Data;
-using OfferteApp.Models;
-using OfferteApp.Services;
 
 namespace OfferteApp;
 
@@ -27,7 +23,7 @@ public class Program
             x.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
         }).AddJwtBearer(x =>
         {
-            var key = Encoding.UTF8.GetBytes(builder.Configuration["AppSettings:Token"] ?? throw new InvalidOperationException());
+            var key = Encoding.UTF8.GetBytes(builder.Configuration["Token"] ?? throw new InvalidOperationException());
             x.SaveToken = true;
             x.TokenValidationParameters = new TokenValidationParameters
             {

@@ -1,33 +1,25 @@
-import { useState } from 'react';
-import Navbar from './navbar';
+import React, { useState } from 'react';
+import Navbar from '../Components/Navbar.tsx';
 import { marked } from "marked";
 import sanitizeHtml from "sanitize-html";
+import { Bestelling } from "../interfaces/Bestelling.ts";
+import TableView from "../Components/TableView.tsx";
 
 function Chatbot() {
     const [inputValue, setInputValue] = useState('');
     const [messages, setMessages] = useState([
         'Assistent: Hallo! Hoe kan ik je vandaag helpen met betrekking tot onze keukenbladen?'
     ]);
-    const [infoTable, setInfoTable] = useState({
-        "Materiaalsoort": "",
-        "m2": "",
-        "Randafwerking": "",
-        "Spatrand": "",
-        "Vensterbank": "",
-        "Uitsparing spoelbak": "",
-        "Kraangat": "",
-        "Zeepdispenser": "",
-        "Boorgaten per stuk": "",
-        "Wandcontactdoos": "",
-        "Achterwand m2": "",
-        "Randafwerking achterwand": ""
-    });
+    const [infoTable, setInfoTable] = useState<Bestelling>();
 
     async function sendData(e: React.FormEvent<HTMLFormElement>): Promise<void> {
         e.preventDefault();
         appendUserMessage(inputValue);
         setInputValue('');
-        const response = await fetch('ai/send', {
+
+        const threadId = localStorage.getItem('threadId');
+        const url = threadId ? `ai/chat/${threadId}` : 'ai/chat';
+        const response = await fetch(url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -35,9 +27,13 @@ function Chatbot() {
             body: JSON.stringify({ data: inputValue })
         });
         if (response.ok) {
-            const jsonResponse = await response.json();
-            appendBotMessage(jsonResponse.message);
-            updateInfoTable(jsonResponse.materialinfo);
+            const assistant = await response.json();
+            const message = JSON.parse(assistant.message);
+            appendBotMessage(message.assistant.message);
+            updateInfoTable(message.materiaalInformatie);
+            if (assistant.threadId !== undefined) {
+                localStorage.setItem('threadId', assistant.threadId);
+            }
         } else {
             appendBotMessage('Failed to send data');
         }
@@ -65,21 +61,8 @@ function Chatbot() {
         ]);
     }
 
-    function updateInfoTable(materialinfo: any) {
-        setInfoTable({
-            "Materiaalsoort": materialinfo.material_type,
-            "m2": materialinfo.m2,
-            "Randafwerking": materialinfo.edge_finishing_m,
-            "Spatrand": materialinfo.splashback_m2,
-            "Vensterbank": materialinfo.windowsill_m,
-            "Uitsparing spoelbak": materialinfo.sink_cutout_type,
-            "Kraangat": materialinfo.tap_hole_count,
-            "Zeepdispenser": materialinfo.soap_dispenser_count,
-            "Boorgaten per stuk": materialinfo.drill_holes_count,
-            "Wandcontactdoos": materialinfo.power_outlet_count,
-            "Achterwand m2": materialinfo.backsplash_m2,
-            "Randafwerking achterwand": materialinfo.backsplash_edge_finishing_m
-        });
+    function updateInfoTable(materialinfo: Bestelling) {
+        setInfoTable(materialinfo);
     }
 
     return (
@@ -109,25 +92,7 @@ function Chatbot() {
                     ))}
                 </div>
                 <div className="info-table">
-                    <h3>Live Informatie Tabel</h3>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Label</th>
-                                <th>Waarde</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {Object.entries(infoTable).map(([label, value], index) => (
-                                <tr key={index}>
-                                    <td>
-                                        {label}
-                                    </td>
-                                    <td>{value}</td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
+                    <TableView viewObject={infoTable} />
                 </div>
             </div>
         </>

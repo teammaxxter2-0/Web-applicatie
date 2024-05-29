@@ -41,7 +41,18 @@ public class AccountService : ControllerBase
         }
         return account;
     }
-
+    public bool Delete(int id)
+    {
+        var user = _context.Accounts.FirstOrDefault(q => q.Id == id);
+        if (user == null) return false;
+        _context.Accounts.Remove(user);
+        return _context.SaveChanges() > 0;
+    }
+    public bool Edit(Account acc)
+    {
+        _context.Accounts.Update(acc);
+        return _context.SaveChanges() > 0;
+    }
     public bool AddAccount(CreateUserModel createUser)
     {
         Account acc = new Account()
@@ -53,7 +64,6 @@ public class AccountService : ControllerBase
         _context.Accounts.Add(acc);
         return _context.SaveChanges() > 0;
     }
-
     public ActionResult Authenticate(LoginDto login)
     {
         var account = _context.Accounts.FirstOrDefault(x => x.Username == login.Username);
@@ -68,14 +78,12 @@ public class AccountService : ControllerBase
 
     private string CreateToken(Account account)
     {
-        var conf = new ConfigurationBuilder();
         var claims = new ClaimsIdentity(new[]
         {
             new Claim(ClaimTypes.Name, account.Username),
         });
 
-        // deze sleutel moet eigenlijk naar appsettings
-        var t = _configuration["AppSettings:Token"];
+        var t = _configuration["Token"];
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(t));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature);
         var expiry = DateTime.Now.AddHours(1);
@@ -95,7 +103,7 @@ public class AccountService : ControllerBase
         return token;
     }
 
-    public static string HashPassword(string password)
+    private static string HashPassword(string password)
     {
         byte[] salt;
         byte[] buffer2;
@@ -114,7 +122,7 @@ public class AccountService : ControllerBase
         return Convert.ToBase64String(dst);
     }
 
-    public static bool VerifyHashedPassword(string hashedPassword, string password)
+    private static bool VerifyHashedPassword(string hashedPassword, string password)
     {
         byte[] buffer4;
         if (hashedPassword == null)
@@ -146,8 +154,8 @@ public class AccountService : ControllerBase
     {
         var account = new CreateUserModel()
         {
-            Username = "test@gmail.com",
-            Password = "test123",
+            Username = "admin",
+            Password = "admin",
             PhoneNumber = "06123456789"
         };
         AddAccount(account);
