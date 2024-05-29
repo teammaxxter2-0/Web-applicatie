@@ -1,12 +1,14 @@
 import { Link } from 'react-router-dom';
 import {Button} from "reactstrap";
 import {useState} from "react";
+import {toast} from "react-toastify";
 
 function Navbar() {
     const [loggedIn, setLoggedIn] = useState(localStorage.getItem('token') !== null);
     const logout = () => {
         setLoggedIn(false);
         localStorage.clear();
+        toast.success("Logged out successfully");
     }
     return (
         <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -26,7 +28,7 @@ function Navbar() {
                             <Link className="nav-link" to="/winkelwagen">Winkelwagen  </Link>
                         </li>
                         <li className="nav-item">
-                            <Link className="nav-link" to="/adminpage"> Admin  </Link>
+                            <Link className="nav-link" to="/beheerder"> Admin  </Link>
                         </li>
 
                         {loggedIn &&

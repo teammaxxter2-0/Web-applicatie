@@ -4,7 +4,7 @@ import { BsCaretDownSquareFill } from "react-icons/bs";
 import { FaXmark } from "react-icons/fa6";
 import { GiCheckMark } from "react-icons/gi";
 import Navbar from '../Components/Navbar.tsx';
-import useOptions from "../hooks/Options.tsx";
+import useOptions from "../hooks/Options.ts";
 
 import image1 from '../assets/Material Images/noble_carrara_verzoet.png';
 import image2 from '../assets/Material Images/noble_desiree_grey_matt.png';
@@ -93,17 +93,17 @@ function Catalog() {
                                                         <div className="bool">
                                                             {rectangle.boorgatenPerStuk ? <GiCheckMark style={{ color: 'green' }} /> : <FaXmark style={{ color: 'red' }} />}
                                                             <span className={rectangle.boorgatenPerStuk ? 'green-text' : 'red-text'}> Boorgaten per stuk: </span>
-                                                            {rectangle.boorgatenPerStukPrijs ? 'Mogelijk' : 'Niet Mogelijk'}
+                                                            {rectangle.boorgatenPerStuk ? 'Mogelijk' : 'Niet Mogelijk'}
                                                         </div>
                                                         <div className="bool">
                                                             {rectangle.wcd ? <GiCheckMark style={{ color: 'green' }} /> : <FaXmark style={{ color: 'red' }} />}
                                                             <span className={rectangle.wcd ? 'green-text' : 'red-text'}> Wandcontactdoos: </span>
-                                                            {rectangle.wcdPrijs ? 'Mogelijk' : 'Niet Mogelijk'}
+                                                            {rectangle.wcd ? 'Mogelijk' : 'Niet Mogelijk'}
                                                         </div>
                                                         <div className="bool">
                                                             {rectangle.randafwerking ? <GiCheckMark style={{ color: 'green' }} /> : <FaXmark style={{ color: 'red' }} />}
                                                             <span className={rectangle.randafwerkingPerM ? 'green-text' : 'red-text'}> Randafwerking: </span>
-                                                            {rectangle.randafwerkingPerMPrice ? 'Mogelijk' : 'Niet Mogelijk'}
+                                                            {rectangle.randafwerking ? 'Mogelijk' : 'Niet Mogelijk'}
                                                         </div>
                                                     </div>
                                                 </div>

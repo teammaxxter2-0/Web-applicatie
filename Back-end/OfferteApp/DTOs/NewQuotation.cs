@@ -59,7 +59,7 @@ namespace OfferteApp.Models
         public bool Spoelbak { get; set; }
 
         [JsonPropertyName("uitsparing_spoelbak")]
-        public string UitsparingSpoelbak { get; set; }
+        public string? UitsparingSpoelbak { get; set; }
 
         [JsonPropertyName("spoelbak_prijs")]
         public double SpoelbakPrijs { get; set; }

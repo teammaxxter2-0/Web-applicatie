@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 import Navbar from "../Components/Navbar.tsx";
 import { useParams } from "react-router-dom";
-import useOptions from "../hooks/Options.tsx";
-import { Bestelling } from "../types/Bestelling.ts";
+import useOptions from "../hooks/Options.ts";
+import { Bestelling } from "../interfaces/Bestelling.ts";
 import TableView from "../Components/TableView.tsx";
 import CalculateTotal from "../Components/CalculateTotal.tsx";
-import { Material } from "../types/Materiaalsoort.ts";
+import { Material } from "../interfaces/Materiaalsoort.ts";
 import "../Styles/berekenblad.css";
 import MakeQuote from "../hooks/MakeQuote.ts";
 
@@ -46,11 +46,11 @@ function BerekenBlad() {
             boorgaten_stuk: 0,
             boorgaten_mm: 0,
             boorgaten_prijs_per_stuk: material.boorgatenPerStukPrijs,
-            bootgaten_prijs_totaal: 0,
-            WCD: false,
-            WCD_prijs: material.wcdPrijs,
+            boorgaten_prijs_totaal: 0,
+            wcd: false,
+            wcd_prijs: material.wcdPrijs,
             achterwand: false,
-            acherwand_m2: 0,
+            achterwand_m2: 0,
             achterwand_prijs_per_m2: material.achterwandPerM,
             achterwand_prijs_totaal: 0,
             offerte_prijs_totaal: 0
@@ -66,14 +66,14 @@ function BerekenBlad() {
             randafwerking_prijs_totaal: bestelling.randafwerking_m * bestelling.randafwerking_prijs_per_m,
             spatrand_prijs_totaal: bestelling.spatrand_m * bestelling.spatrand_prijs_per_m,
             offerte_prijs_totaal: CalculateTotal(bestelling),
-            achterwand_prijs_totaal: bestelling.acherwand_m2 * bestelling.achterwand_prijs_per_m2,
+            achterwand_prijs_totaal: bestelling.achterwand_m2 * bestelling.achterwand_prijs_per_m2,
             vensterbank_prijs_totaal: bestelling.vensterbank_m * bestelling.vensterbank_prijs_per_m,
-            bootgaten_prijs_totaal: bestelling.boorgaten_stuk * bestelling.boorgaten_prijs_per_stuk
+            boorgaten_prijs_totaal: bestelling.boorgaten_stuk * bestelling.boorgaten_prijs_per_stuk
         };
 
         setBestelling(updatedBestelling);
-    }, [bestelling?.aantal_m2, bestelling?.randafwerking_m, bestelling?.acherwand_m2, bestelling?.spatrand_m, bestelling?.acherwand_m2, bestelling?.vensterbank_m, bestelling?.spoelbak,
-    bestelling?.kraangat, bestelling?.zeepdispenser, bestelling?.boorgaten_stuk, bestelling?.WCD]);
+    }, [bestelling?.aantal_m2, bestelling?.randafwerking_m, bestelling?.achterwand_m2, bestelling?.spatrand_m, bestelling?.achterwand_m2, bestelling?.vensterbank_m, bestelling?.spoelbak,
+    bestelling?.kraangat, bestelling?.zeepdispenser, bestelling?.boorgaten_stuk, bestelling?.wcd]);
 
     const updateBestellingAttribute = <K extends keyof Bestelling>(key: K, value: Bestelling[K]) => {
         setBestelling(prevState => {
@@ -233,24 +233,26 @@ function BerekenBlad() {
                                 <label>
                                     Wilt u een contactdoos?
                                     <select
-                                        value={bestelling?.WCD ? "ja" : "nee"}
-                                        onChange={(e) => updateBestellingAttribute("WCD", e.target.value === "ja")}
+                                        value={bestelling?.wcd ? "ja" : "nee"}
+                                        onChange={(e) => updateBestellingAttribute("wcd", e.target.value === "ja")}
                                     >
                                         <option value="ja">Ja</option>
                                         <option value="nee">Nee</option>
                                     </select>
                                 </label>
                             )}
+                            {material?.randafwerking && (
                             <label>
                                 Voer het aantal vierkante meters achterwand in:
                                 <input
                                     type="number"
-                                    value={bestelling?.acherwand_m2}
-                                    onChange={(e) => updateBestellingAttribute("acherwand_m2", parseFloat(e.target.value))}
+                                    value={bestelling?.achterwand_m2}
+                                    onChange={(e) => updateBestellingAttribute("achterwand_m2", parseFloat(e.target.value))}
                                     min="0"
                                     step="0.01"
                                 />
                             </label>
+                            )}
                             <button type={"submit"}>Vraag aan</button>
                         </form>
                     </div>

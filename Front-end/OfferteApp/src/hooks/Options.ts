@@ -1,4 +1,4 @@
-import {Material} from "../types/Materiaalsoort.ts";
+import {Material} from "../interfaces/Materiaalsoort.ts";
 import {useEffect, useState} from "react";
 
 function useOptions(): Material[];

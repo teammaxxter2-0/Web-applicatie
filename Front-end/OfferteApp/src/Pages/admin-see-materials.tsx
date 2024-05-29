@@ -3,13 +3,15 @@ import { SearchOutlined, EditOutlined, DeleteOutlined, LoadingOutlined, InfoCirc
 import { Button, Input, Space, Table, message, Popconfirm, InputNumber, Modal, Form, Checkbox } from 'antd';
 import type { InputRef, TableColumnsType, TableColumnType } from 'antd';
 import type { FilterDropdownProps } from 'antd/es/table/interface';
-import Navbar from './Components/Navbar.tsx';
+import Navbar from '../Components/Navbar.tsx';
 import { useNavigate } from 'react-router-dom';
-import { Option } from './interfaces/Options';
+import { Option } from '../interfaces/Options.ts';
+import useToken from "../hooks/Token.ts";
 
 type DataIndex = keyof Option;
 
 function AdminSeeMaterials() {
+  const token = useToken();
   const [searchText, setSearchText] = useState('');
   const [searchedColumn, setSearchedColumn] = useState('');
   const searchInput = useRef<InputRef>(null);
@@ -28,8 +30,9 @@ function AdminSeeMaterials() {
   useEffect(() => {
     console.log(searchText);
     console.log(searchedColumn);
-    fetchData();
-  }, []);
+    fetchData().then();
+  }, [searchText, searchedColumn]);
+
   const fetchData = async () => {
     try {
       const response = await fetch('/api/Options');
@@ -118,6 +121,9 @@ function AdminSeeMaterials() {
     try {
       const response = await fetch(`/api/Options/${id}`, {
         method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
       });
 
       if (response.ok) {
@@ -160,6 +166,7 @@ function AdminSeeMaterials() {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
         },
         body: JSON.stringify({ ...selectedOption, ...values }),
       });
@@ -186,6 +193,7 @@ function AdminSeeMaterials() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
         },
         body: JSON.stringify(values),
       });

@@ -1,4 +1,4 @@
-import {Bestelling} from "../types/Bestelling.ts";
+import {Bestelling} from "../interfaces/Bestelling.ts";
 
 
 function CalculateTotal(bestelling: Bestelling): number {
@@ -7,7 +7,7 @@ function CalculateTotal(bestelling: Bestelling): number {
     const spatrandPrijsTotaal = bestelling.spatrand_m * bestelling.spatrand_prijs_per_m;
     const vensterbankPrijsTotaal = bestelling.vensterbank_m * bestelling.vensterbank_prijs_per_m;
     const boorgatenPrijsTotaal = bestelling.boorgaten_stuk * bestelling.boorgaten_prijs_per_stuk;
-    const achterwandPrijsTotaal = bestelling.acherwand_m2 * bestelling.achterwand_prijs_per_m2;
+    const achterwandPrijsTotaal = bestelling.achterwand_m2 * bestelling.achterwand_prijs_per_m2;
 
     return prijsM2Totaal +
         randafwerkingPrijsTotaal +
@@ -17,7 +17,7 @@ function CalculateTotal(bestelling: Bestelling): number {
         (bestelling.kraangat ? bestelling.kraangat_prijs : 0) +
         (bestelling.zeepdispenser ? bestelling.zeepdispenser_prijs : 0) +
         boorgatenPrijsTotaal +
-        (bestelling.WCD ? bestelling.WCD_prijs : 0) +
+        (bestelling.wcd ? bestelling.wcd_prijs : 0) +
         achterwandPrijsTotaal;
 }
 

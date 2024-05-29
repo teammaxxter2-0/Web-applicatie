@@ -1,4 +1,4 @@
-import {Bestelling} from "../types/Bestelling.ts";
+import {Bestelling} from "../interfaces/Bestelling.ts";
 import React from "react";
 
 interface Props {

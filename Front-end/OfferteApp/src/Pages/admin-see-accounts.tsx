@@ -3,13 +3,15 @@ import { SearchOutlined, EditOutlined, DeleteOutlined, LoadingOutlined, InfoCirc
 import { Button, Input, Space, Table, message, Popconfirm, Modal, Form } from 'antd';
 import type { InputRef, TableColumnsType, TableColumnType } from 'antd';
 import type { FilterDropdownProps } from 'antd/es/table/interface';
-import Navbar from './Components/Navbar.tsx';
+import Navbar from '../Components/Navbar.tsx';
 import { useNavigate } from 'react-router-dom';
-import { User } from './interfaces/Users';
+import { User } from '../interfaces/Users.ts';
+import useToken from "../hooks/Token.ts";
 
 type DataIndex = keyof User;
 
 function AdminSeeAccounts() {
+  const token = useToken();
   const [searchText, setSearchText] = useState('');
   const [searchedColumn, setSearchedColumn] = useState('');
   const searchInput = useRef<InputRef>(null);
@@ -33,7 +35,11 @@ function AdminSeeAccounts() {
 
   const fetchData = async () => {
     try {
-      const response = await fetch('/api/User');
+
+      const response = await fetch('/api/User',
+          {
+            headers: { Authorization: "Bearer " + token }
+          });
       if (response.ok) {
         const data = await response.json();
         setUsers(data);
@@ -118,6 +124,7 @@ function AdminSeeAccounts() {
     try {
       const response = await fetch(`/api/User/${id}`, {
         method: 'DELETE',
+        headers: { Authorization: `Bearer ${token}` }
       });
 
       if (response.ok) {
@@ -160,6 +167,7 @@ function AdminSeeAccounts() {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
         },
         body: JSON.stringify({ ...selectedUser, ...values }), // Merge selectedUser and form values
       });
@@ -186,6 +194,7 @@ function AdminSeeAccounts() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
         },
         body: JSON.stringify(values),
       });

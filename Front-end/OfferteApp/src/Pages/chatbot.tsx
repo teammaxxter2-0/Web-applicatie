@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Navbar from '../Components/Navbar.tsx';
 import { marked } from "marked";
 import sanitizeHtml from "sanitize-html";
-import { Bestelling } from "../types/Bestelling.ts";
+import { Bestelling } from "../interfaces/Bestelling.ts";
 import TableView from "../Components/TableView.tsx";
 
 function Chatbot() {

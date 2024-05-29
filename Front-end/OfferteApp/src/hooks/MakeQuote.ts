@@ -1,4 +1,4 @@
-import {Bestelling} from "../types/Bestelling.ts";
+import {Bestelling} from "../interfaces/Bestelling.ts";
 
 function MakeQuote(quote: Bestelling) {
     console.log(JSON.stringify(quote));

@@ -1,80 +1,40 @@
 import React from 'react'
-
 import ReactDOM from 'react-dom/client'
+import {BrowserRouter, Route, Routes} from "react-router-dom";
 import App from './Pages/App.tsx'
 import ErrorPage from "./Pages/error-page.tsx"
-
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-
-import "bootstrap/dist/css/bootstrap.min.css";
-//import './index.css'
 import Chatbot from './Pages/chatbot.tsx';
 import Catalog from './Pages/catalog.tsx';
 import Winkelwagen from './Pages/winkelwagen.tsx';
 import LogIn from './Pages/login.tsx';
 import BerekenBlad from "./Pages/Berekenblad.tsx";
-import AdminSeeMaterials from './admin-see-materials.tsx';
-import AdminPage from './admin.tsx';
-import AdminSeeOffertes from './admin-see-offertes.tsx';
-import AdminSeeAccounts from './admin-see-accounts.tsx';
+import AdminSeeMaterials from './Pages/admin-see-materials.tsx';
+import AdminPage from './Pages/admin.tsx';
+import AdminSeeOffertes from './Pages/admin-see-offertes.tsx';
+import AdminSeeAccounts from './Pages/admin-see-accounts.tsx';
+import "bootstrap/dist/css/bootstrap.min.css";
+import 'react-toastify/dist/ReactToastify.css';
+import {ToastContainer} from "react-toastify";
 
-const router = createBrowserRouter([
-    {
-        path: "/",
-        element: <App />,
-        errorElement: <ErrorPage />,
-    },
-    {
-        path: "/chatbot",
-        element: <Chatbot />,
-        errorElement: <ErrorPage />,
-    },
-    {
-        path: "/catalog",
-        element: <Catalog />,
-        errorElement: <ErrorPage />,
-    },
-    {
-        path: "/winkelwagen",
-        element: <Winkelwagen />,
-        errorElement: <ErrorPage />,
-    },
-    {
-        path: "/login",
-        element: <LogIn />,
-        errorElement: <ErrorPage />,
-    },
-    {
-        path: "/berekenblad/:id",
-        element: <BerekenBlad />,
-        errorElement: <ErrorPage />,
-    },
-    {
-        path: "/adminpage",
-        element: <AdminPage />,
-        errorElement: <ErrorPage />,
-    },
-    {
-        path: "/seematerials",
-        element: <AdminSeeMaterials/>,
-        errorElement: <ErrorPage />,
-    },
-    {
-        path: "/seeoffertes",
-        element: <AdminSeeOffertes/>,
-        errorElement: <ErrorPage />,
-    },
-    {
-        path: "/accounts",
-        element: <AdminSeeAccounts/>,
-        errorElement: <ErrorPage />,
-    },
-
-
-]);
 ReactDOM.createRoot(document.getElementById('root')!).render(
     <React.StrictMode>
-        <RouterProvider router={router} />
-
-    </React.StrictMode>,
+        <ToastContainer />
+        <BrowserRouter>
+            <Routes>
+                <Route index element={<App />}></Route>
+                <Route path={"*"} element={<ErrorPage />}></Route>
+                <Route path={"chatbot"} element={<Chatbot />}></Route>
+                <Route path={"catalog"} element={<Catalog />}></Route>
+                <Route path={"winkelwagen"} element={<Winkelwagen />}></Route>
+                <Route path={"login"} element={<LogIn />}></Route>
+                <Route path={"berekenblad/:id"} element={<BerekenBlad />}></Route>
+                <Route path={"beheerder"}>
+                    <Route index element={<AdminPage />}></Route>
+                    <Route path={"materials"} element={<AdminSeeMaterials />}></Route>
+                    <Route path={"offertes"} element={<AdminSeeOffertes />}></Route>
+                    <Route path={"accounts"} element={<AdminSeeAccounts />}></Route>
+                </Route>
+            </Routes>
+        </BrowserRouter>
+    </React.StrictMode>
 )

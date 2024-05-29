@@ -154,8 +154,8 @@ public class AccountService : ControllerBase
     {
         var account = new CreateUserModel()
         {
-            Username = "test@gmail.com",
-            Password = "test123",
+            Username = "admin",
+            Password = "admin",
             PhoneNumber = "06123456789"
         };
         AddAccount(account);

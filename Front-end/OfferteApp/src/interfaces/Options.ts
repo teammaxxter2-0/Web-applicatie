@@ -19,4 +19,4 @@ export interface Option {
     wcdPrijs: number;
     achterwandPerM: number;
     randafwerkingPerMPrice: number;
-  }
+}

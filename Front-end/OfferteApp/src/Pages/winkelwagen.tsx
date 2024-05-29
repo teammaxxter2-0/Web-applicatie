@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import Navbar from '../Components/Navbar.tsx';
-import { Material } from "../types/Materiaalsoort.ts";
-import useOptions from "../hooks/Options.tsx";
+import { Material } from "../interfaces/Materiaalsoort.ts";
+import useOptions from "../hooks/Options.ts";
 
 function Winkelwagen() {
     const materials = useOptions();
