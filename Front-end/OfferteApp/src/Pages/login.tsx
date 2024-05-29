@@ -2,7 +2,7 @@ import React, {useState} from 'react'
 import '../Styles/App.css';
 import Navbar from '../Components/Navbar.tsx';
 import {useNavigate} from 'react-router-dom';
-import {Bounce, toast} from "react-toastify";
+import {message} from "antd";
 
 import blis from "../assets/blis.webp";
 
@@ -12,28 +12,8 @@ function LogIn() {
     const navigate = useNavigate();
 
     async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-        const notifyPos = (text: string) => toast.success(text, {
-            position: "top-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "dark",
-            transition: Bounce,
-        });
-        const notifyNeg = (text: string) => toast.error(text, {
-            position: "top-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "dark",
-            transition: Bounce,
-        });
+        const notifyPos = (text: string) => message.success(text);
+        const notifyNeg = (text: string) => message.error(text)
         event.preventDefault();
         if (username === "" || password === "") {
             notifyNeg("Vul alle velden in!");
