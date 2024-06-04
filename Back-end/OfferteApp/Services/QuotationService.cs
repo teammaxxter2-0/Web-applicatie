@@ -17,6 +17,7 @@ public class QuotationService(DatabaseContext context)
         {
             Creation = DateTime.UtcNow,
             Name = quote.Name,
+            Accepted = false,
             AantalM2 = quote.AantalM2,
             PrijsPerM2 = quote.PrijsPerM2,
             PrijsM2Totaal = quote.PrijsM2Totaal,

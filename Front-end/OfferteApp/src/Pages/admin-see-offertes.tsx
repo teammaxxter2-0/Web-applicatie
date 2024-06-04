@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { Bestelling } from '../interfaces/Bestelling.ts';
 import useToken from "../hooks/Token.ts";
 import GeneratePDF from "../Components/GeneratePDF.ts";
+import {Offerte} from "../interfaces/Offerte.ts";
 
 type DataIndex = keyof Bestelling;
 
@@ -15,11 +16,11 @@ function AdminSeeOffertes() {
   const token = useToken();
   const [searchText, setSearchText] = useState('');
   const [searchedColumn, setSearchedColumn] = useState('');
-  const [bestellingen, setBestelingen] = useState<Bestelling[]>([]);
+  const [bestellingen, setBestelingen] = useState<Offerte[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [isViewModalVisible, setIsViewModalVisible] = useState(false);
-  const [selectedOption, setSelectedOption] = useState<Bestelling>({} as Bestelling);
+  const [selectedOption, setSelectedOption] = useState<Offerte>({} as Offerte);
 
   const searchInput = useRef<InputRef>(null);
   const navigate = useNavigate();
@@ -115,10 +116,10 @@ function AdminSeeOffertes() {
   const handleViewModalClose = () => {
     setIsViewModalVisible(false);
     console.log(selectedOption);
-    setSelectedOption({} as Bestelling);
+    setSelectedOption({} as Offerte);
   };
 
-  const handleDetails = (record: Bestelling) => {
+  const handleDetails = (record: Offerte) => {
     setSelectedOption(record);
 
     setIsViewModalVisible(true);
@@ -180,6 +181,8 @@ function AdminSeeOffertes() {
         >
           <div>
             <p><strong>Naam:</strong> {selectedOption.name}</p>
+            <p><strong>Aangemaakt op:</strong> {selectedOption.creation.toLocaleString()}</p>
+            <p><strong>Geaccepteerd:</strong> {selectedOption.accepted ? "Ja" : "Nee"}</p>
             <p><strong>Aantal m2:</strong> {selectedOption.aantal_m2}</p>
             <p><strong>Prijs per m2:</strong> €{selectedOption.prijs_per_m2}</p>
             <p><strong>Prijs m2 Totaal:</strong> €{selectedOption.prijs_m2_totaal}</p>
