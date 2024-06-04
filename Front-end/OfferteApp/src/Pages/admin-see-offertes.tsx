@@ -5,12 +5,11 @@ import type { InputRef, TableColumnsType, TableColumnType } from 'antd';
 import type { FilterDropdownProps } from 'antd/es/table/interface';
 import Navbar from '../Components/Navbar.tsx';
 import { useNavigate } from 'react-router-dom';
-import { Bestelling } from '../interfaces/Bestelling.ts';
 import useToken from "../hooks/Token.ts";
 import GeneratePDF from "../Components/GeneratePDF.ts";
 import {Offerte} from "../interfaces/Offerte.ts";
 
-type DataIndex = keyof Bestelling;
+type DataIndex = keyof Offerte;
 
 function AdminSeeOffertes() {
   const token = useToken();
@@ -67,7 +66,7 @@ function AdminSeeOffertes() {
     setSearchText('');
   };
 
-  const getColumnSearchProps = (dataIndex: DataIndex): TableColumnType<Bestelling> => ({
+  const getColumnSearchProps = (dataIndex: DataIndex): TableColumnType<Offerte> => ({
     filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
         <div style={{ padding: 8 }} onKeyDown={(e) => e.stopPropagation()}>
           <Input
@@ -125,7 +124,7 @@ function AdminSeeOffertes() {
     setIsViewModalVisible(true);
   };
 
-  const columns: TableColumnsType<Bestelling> = [
+  const columns: TableColumnsType<Offerte> = [
     {
       title: 'name',
       dataIndex: 'name',
