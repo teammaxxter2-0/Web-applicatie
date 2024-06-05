@@ -39,4 +39,12 @@ public class QuotationController(DatabaseContext context) : ControllerBase
     {
         return _service.Delete(id) ? Ok() : BadRequest();
     }
+
+    [Authorize]
+    [HttpGet]
+    [Route("{id}/accept")]
+    public IActionResult Accept(int id)
+    {
+        return _service.Accept(id) ? Ok() : BadRequest();
+    }
 }

@@ -17,6 +17,7 @@ public class QuotationService(DatabaseContext context)
         {
             Creation = DateTime.UtcNow,
             Name = quote.Name,
+            Accepted = false,
             AantalM2 = quote.AantalM2,
             PrijsPerM2 = quote.PrijsPerM2,
             PrijsM2Totaal = quote.PrijsM2Totaal,
@@ -67,6 +68,15 @@ public class QuotationService(DatabaseContext context)
         var quote = context.Quotations.FirstOrDefault(q => q.Id == id);
         if (quote == null) return false;
         context.Quotations.Remove(quote);
+        return context.SaveChanges() > 0;
+    }
+
+    public bool Accept(int id)
+    {
+        var quote = context.Quotations.FirstOrDefault(u => u.Id == id);
+        if (quote == null) return false;
+        quote.Accepted = true;
+        context.Quotations.Update(quote);
         return context.SaveChanges() > 0;
     }
 }

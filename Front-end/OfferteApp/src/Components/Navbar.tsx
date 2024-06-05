@@ -1,14 +1,14 @@
 import { Link } from 'react-router-dom';
 import {Button} from "reactstrap";
 import {useState} from "react";
-import {toast} from "react-toastify";
+import {message} from "antd";
 
 function Navbar() {
     const [loggedIn, setLoggedIn] = useState(localStorage.getItem('token') !== null);
     const logout = () => {
         setLoggedIn(false);
         localStorage.clear();
-        toast.success("Logged out successfully");
+        message.success("Logged out successfully");
     }
     return (
         <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -25,16 +25,15 @@ function Navbar() {
                             <Link className="nav-link" to="/chatbot">Chatbot </Link>
                         </li>
                         <li className="nav-item">
-                            <Link className="nav-link" to="/winkelwagen">Winkelwagen  </Link>
+                            <Link className="nav-link" to="/winkelwagen">Winkelwagen </Link>
                         </li>
                         <li className="nav-item">
-                            <Link className="nav-link" to="/beheerder"> Admin  </Link>
+                            <Link className="nav-link" to="/beheerder">Beheer </Link>
                         </li>
-
                         {loggedIn &&
-                        <li className="nav-item">
-                          <Button className="nav-link" onClick={logout}>Logout</Button>
-                        </li>
+                          <li className="nav-item">
+                            <Button className="nav-link" onClick={logout}>Logout</Button>
+                          </li>
                         }
                     </ul>
                 </div>
