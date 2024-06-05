@@ -159,8 +159,21 @@ function AdminSeeOffertes() {
       title: 'offerte_prijs_totaal',
       dataIndex: 'offerte_prijs_totaal',
       key: 'offerte_prijs_totaal',
-      width: '40%',
+      width: '20%',
       ...getColumnSearchProps('offerte_prijs_totaal'),
+    },
+    {
+      title: 'Geaccepteerd',
+      dataIndex: 'accepted',
+      key: 'accepted',
+      width: '20%',
+      render: (_text, record) => (record.accepted ? 'Ja' : 'Nee'),
+      filters: [
+        { text: 'Ja', value: true },
+        { text: 'Nee', value: false },
+      ],
+      onFilter: (value, record) => record.accepted === value,
+      ...getColumnSearchProps('accepted'),
     },
     {
       title: 'Acties',
