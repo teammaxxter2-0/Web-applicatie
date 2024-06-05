@@ -70,4 +70,13 @@ public class QuotationService(DatabaseContext context)
         context.Quotations.Remove(quote);
         return context.SaveChanges() > 0;
     }
+
+    public bool Accept(int id)
+    {
+        var quote = context.Quotations.FirstOrDefault(u => u.Id == id);
+        if (quote == null) return false;
+        quote.Accepted = true;
+        context.Quotations.Update(quote);
+        return context.SaveChanges() > 0;
+    }
 }

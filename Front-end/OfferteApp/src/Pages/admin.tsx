@@ -28,7 +28,7 @@ function AdminPage() {
                     </div>
                     <div className="mb-5">
                         <Button  block onClick={() => navigate('/beheerder/offertes')}>
-                            NIET KLAAR: Klik hier om naar <strong> offertes </strong> te gaan
+                            Klik hier om naar <strong> offertes </strong> te gaan
                         </Button>
                     </div>
                 </Card>

@@ -66,16 +66,14 @@ function AdminSeeOffertes() {
     setSearchText('');
   };
 
-  const accepteer = async (quote: Offerte) => {
-    quote.accepted = true;
+  const accepteer = async (id: number) => {
     try{
-      const response = await fetch("/api/Quotation/", {
-        method: "PUT",
+      const response = await fetch(`/api/Quotation/${id}/accept`, {
+        method: "GET",
         headers: {
           'Content-Type': 'application/json',
           authorization: `Bearer ${token}`
-        },
-        body: JSON.stringify({...quote})
+        }
       })
     if (response.ok) {
       message.success("De offerte is geaccepteerd!")
@@ -254,7 +252,7 @@ function AdminSeeOffertes() {
             <p><strong>Achterwand Prijs Totaal:</strong> €{selectedOption.achterwand_prijs_totaal}</p>
             <p><strong>Offerte Prijs Totaal:</strong> €{selectedOption.offerte_prijs_totaal}</p>
             <Button type="link" onClick={() => GeneratePDF(selectedOption)}>GENEREER PDF</Button>
-            <Button type={"link"} onClick={() => accepteer(selectedOption)}>Accepteer offerte</Button>
+            <Button type={"link"} onClick={() => accepteer(selectedOption.id)}>Accepteer offerte</Button>
           </div>
         </Modal>
       </>
