@@ -190,7 +190,7 @@ function AdminSeeAccounts() {
     try {
       const values = form.getFieldsValue();
 
-      const response = await fetch('api/User', {
+      const response = await fetch('/api/User', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -198,7 +198,6 @@ function AdminSeeAccounts() {
         },
         body: JSON.stringify(values),
       });
-      console.log(response);
       if (response.ok) {
 
         message.success('Account succesvol aangemaakt');
@@ -288,7 +287,7 @@ function AdminSeeAccounts() {
 
       <Modal
         title="Account Info"
-        visible={isViewModalVisible}
+        open={isViewModalVisible}
         onCancel={handleViewModalClose}
         width={600}
         footer={[
@@ -309,7 +308,7 @@ function AdminSeeAccounts() {
 
       <Modal
         title="Edit Account"
-        visible={isEditModalVisible}
+        open={isEditModalVisible}
         onCancel={handleEditModalClose}
         width={800}
         footer={[
@@ -341,7 +340,7 @@ function AdminSeeAccounts() {
 
       <Modal
         title="Create Account"
-        visible={isCreateModalVisible}
+        open={isCreateModalVisible}
         onCancel={handleCreateModalClose}
         width={800}
         footer={[
