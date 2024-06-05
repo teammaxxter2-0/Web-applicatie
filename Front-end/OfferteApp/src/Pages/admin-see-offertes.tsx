@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect } from 'react';
 import { SearchOutlined, FormOutlined, LoadingOutlined } from '@ant-design/icons';
-import { Button, Input, Space, Table, Modal } from 'antd';
+import {Button, Input, Space, Table, Modal, message} from 'antd';
 import type { InputRef, TableColumnsType, TableColumnType } from 'antd';
 import type { FilterDropdownProps } from 'antd/es/table/interface';
 import Navbar from '../Components/Navbar.tsx';
@@ -65,6 +65,29 @@ function AdminSeeOffertes() {
     clearFilters();
     setSearchText('');
   };
+
+  const accepteer = async (quote: Offerte) => {
+    quote.accepted = true;
+    try{
+      const response = await fetch("/api/Quotation/", {
+        method: "PUT",
+        headers: {
+          'Content-Type': 'application/json',
+          authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({...quote})
+      })
+    if (response.ok) {
+      message.success("De offerte is geaccepteerd!")
+    }else{
+      message.error("Het is niet gelukt om de offerte te accepteren.")
+    }
+    }catch(err){
+      console.error(err);
+      message.error("Het is niet gelukt om de offerte te accepteren.")
+    }
+    await fetchData();
+  }
 
   const getColumnSearchProps = (dataIndex: DataIndex): TableColumnType<Offerte> => ({
     filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
@@ -169,7 +192,7 @@ function AdminSeeOffertes() {
 
         <Modal
             title="Bestelling Info"
-            visible={isViewModalVisible}
+            open={isViewModalVisible}
             onCancel={handleViewModalClose}
             width={600}
             footer={[
@@ -180,7 +203,7 @@ function AdminSeeOffertes() {
         >
           <div>
             <p><strong>Naam:</strong> {selectedOption.name}</p>
-            <p><strong>Aangemaakt op:</strong> {selectedOption.creation.toLocaleString()}</p>
+            <p><strong>Aangemaakt op:</strong> {selectedOption.creation === undefined ? "Geen tijd bekend" : selectedOption.creation.toLocaleString()}</p>
             <p><strong>Geaccepteerd:</strong> {selectedOption.accepted ? "Ja" : "Nee"}</p>
             <p><strong>Aantal m2:</strong> {selectedOption.aantal_m2}</p>
             <p><strong>Prijs per m2:</strong> €{selectedOption.prijs_per_m2}</p>
@@ -217,7 +240,8 @@ function AdminSeeOffertes() {
             <p><strong>Achterwand Prijs per m2:</strong> €{selectedOption.achterwand_prijs_per_m2}</p>
             <p><strong>Achterwand Prijs Totaal:</strong> €{selectedOption.achterwand_prijs_totaal}</p>
             <p><strong>Offerte Prijs Totaal:</strong> €{selectedOption.offerte_prijs_totaal}</p>
-            <Button type="link" onClick={() => GeneratePDF(selectedOption)}> GENEREER PDF</Button>
+            <Button type="link" onClick={() => GeneratePDF(selectedOption)}>GENEREER PDF</Button>
+            <Button type={"link"} onClick={() => accepteer(selectedOption)}>Accepteer offerte</Button>
           </div>
         </Modal>
       </>

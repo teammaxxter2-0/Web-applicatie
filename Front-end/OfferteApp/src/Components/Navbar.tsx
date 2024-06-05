@@ -1,14 +1,14 @@
 import { Link } from 'react-router-dom';
 import {Button} from "reactstrap";
 import {useState} from "react";
-import {toast} from "react-toastify";
+import {message} from "antd";
 
 function Navbar() {
     const [loggedIn, setLoggedIn] = useState(localStorage.getItem('token') !== null);
     const logout = () => {
         setLoggedIn(false);
         localStorage.clear();
-        toast.success("Logged out successfully");
+        message.success("Logged out successfully");
     }
     return (
         <nav className="navbar navbar-expand-lg navbar-dark bg-dark">

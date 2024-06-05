@@ -12,10 +12,7 @@ function App() {
                 <a href={`/chatbot`}>Chat bot</a>
             </li>
             <li>
-                <a href={`/catalog`}>catalog</a>
-            </li>
-            <li>
-                <a href={`/pricelist`}>Price list</a>
+                <a href={`/catalog`}>Catalogus</a>
             </li>
         </>
     );
