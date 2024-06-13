@@ -103,8 +103,8 @@ public class QuotationService(DatabaseContext context)
             var password = _configuration["Email:SMTPPasssword"]!.ToString();
             var fromAddress = new MailAddress(senderEmail, senderName);
             var toAddress = new MailAddress(receiverEmail);
-            GeneratePdf(quotation);
-            Attachment attachment = new Attachment("file.pdf");
+            var pdf = GeneratePdf(quotation);
+            Attachment attachment = new Attachment(pdf);
             
             using var smtpClient = new SmtpClient("smtp.gmail.com");
             smtpClient.Port = 587;
@@ -126,7 +126,7 @@ public class QuotationService(DatabaseContext context)
         }
     }
     
-    private void GeneratePdf(Quotation quotation)
+    private string GeneratePdf(Quotation quotation)
     {
         PdfDocument document = new PdfDocument();
         document.Info.Title = "Quotation";
@@ -179,7 +179,9 @@ public class QuotationService(DatabaseContext context)
                          $"Offerte prijs totaal: {quotation.OffertePrijsTotaal}";
         
         gfx.DrawString(details, font, XBrushes.Black, new XRect(40, 40, page.Width - 80, page.Height - 40), format);
-        document.Save($"../PDF/Quote_{quotation.OffertePrijsTotaal}");
+        var file_loc = $"../PDF/Quote_{quotation.OffertePrijsTotaal}.pdf";
+        document.Save(file_loc);
         document.Close();
+        return file_loc;
     }
 }
