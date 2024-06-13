@@ -3,6 +3,8 @@ using System.Net.Mail;
 using Microsoft.AspNetCore.Mvc;
 using OfferteApp.Data;
 using OfferteApp.Models;
+using PdfSharp.Drawing;
+using PdfSharp.Pdf;
 
 namespace OfferteApp.Services;
 
@@ -101,6 +103,7 @@ public class QuotationService(DatabaseContext context)
             var password = _configuration["Email:SMTPPasssword"]!.ToString();
             var fromAddress = new MailAddress(senderEmail, senderName);
             var toAddress = new MailAddress(receiverEmail);
+            GeneratePdf(quotation);
             Attachment attachment = new Attachment("file.pdf");
             
             using var smtpClient = new SmtpClient("smtp.gmail.com");
@@ -121,5 +124,62 @@ public class QuotationService(DatabaseContext context)
         {
             return false;
         }
+    }
+    
+    private void GeneratePdf(Quotation quotation)
+    {
+        PdfDocument document = new PdfDocument();
+        document.Info.Title = "Quotation";
+
+        PdfPage page = document.AddPage();
+        XGraphics gfx = XGraphics.FromPdfPage(page);
+        XFont font = new XFont("Arial", 12);
+
+        XStringFormat format = new XStringFormat();
+        format.Alignment = XStringAlignment.Near;
+
+        gfx.DrawString("Quotation", font, XBrushes.Black, new XRect(0, 20, page.Width, 0), format);
+
+        string details = $"Name: {quotation.Name}\n" +
+                         $"Total Price: {quotation.OffertePrijsTotaal}\n" +
+                         $"Aantal m2: {quotation.AantalM2}\n" +
+                         $"Prijs per m2: {quotation.PrijsPerM2}\n" +
+                         $"Prijs m2 totaal: {quotation.PrijsM2Totaal}\n" +
+                         $"Randafwerking: {(quotation.Randafwerking ? "Yes" : "No")}\n" +
+                         $"Randafwerking m: {quotation.RandafwerkingM}\n" +
+                         $"Randafwerking prijs per m: {quotation.RandafwerkingPrijsPerM}\n" +
+                         $"Randafwerking hoogte mm: {quotation.RandafwerkingHoogteMm}\n" +
+                         $"Randafwerking prijs totaal: {quotation.RandafwerkingPrijsTotaal}\n" +
+                         $"Spatrand m: {quotation.SpatrandM}\n" +
+                         $"Spatrand prijs per m: {quotation.SpatrandPrijsPerM}\n" +
+                         $"Spatrand hoogte mm: {quotation.SpatrandHoogteMm}\n" +
+                         $"Spatrand prijs totaal: {quotation.SpatrandPrijsTotaal}\n" +
+                         $"Vensterbank m: {quotation.VensterbankM}\n" +
+                         $"Vensterbank prijs per m: {quotation.VensterbankPrijsPerM}\n" +
+                         $"Vensterbank breedte mm: {quotation.VensterbankBreedteMm}\n" +
+                         $"Vensterbank prijs totaal: {quotation.VensterbankPrijsTotaal}\n" +
+                         $"Spoelbak: {(quotation.Spoelbak ? "Yes" : "No")}\n" +
+                         $"Uitsparing spoelbak: {quotation.UitsparingSpoelbak}\n" +
+                         $"Spoelbak prijs: {quotation.SpoelbakPrijs}\n" +
+                         $"Kraangat: {(quotation.Kraangat ? "Yes" : "No")}\n" +
+                         $"Kraangat prijs: {quotation.KraangatPrijs}\n" +
+                         $"Zeepdispenser: {(quotation.Zeepdispenser ? "Yes" : "No")}\n" +
+                         $"Zeepdispenser prijs: {quotation.ZeepdispenserPrijs}\n" +
+                         $"Boorgaten: {(quotation.Boorgaten ? "Yes" : "No")}\n" +
+                         $"Boorgaten stuk: {quotation.BoorgatenStuk}\n" +
+                         $"Boorgaten mm: {quotation.BoorgatenMm}\n" +
+                         $"Boorgaten prijs per stuk: {quotation.BoorgatenPrijsPerStuk}\n" +
+                         $"Boorgaten prijs totaal: {quotation.BoorgatenPrijsTotaal}\n" +
+                         $"WCD: {(quotation.WCD ? "Yes" : "No")}\n" +
+                         $"WCD prijs: {quotation.WCDPrijs}\n" +
+                         $"Achterwand: {(quotation.Achterwand ? "Yes" : "No")}\n" +
+                         $"Achterwand m2: {quotation.AchterwandM2}\n" +
+                         $"Achterwand prijs per m2: {quotation.AchterwandPrijsPerM2}\n" +
+                         $"Achterwand prijs totaal: {quotation.AchterwandPrijsTotaal}\n" +
+                         $"Offerte prijs totaal: {quotation.OffertePrijsTotaal}";
+        
+        gfx.DrawString(details, font, XBrushes.Black, new XRect(40, 40, page.Width - 80, page.Height - 40), format);
+        document.Save($"../PDF/Quote_{quotation.OffertePrijsTotaal}");
+        document.Close();
     }
 }
