@@ -8,7 +8,7 @@ using PdfSharp.Pdf;
 
 namespace OfferteApp.Services;
 
-public class QuotationService(DatabaseContext context)
+public class QuotationService(DatabaseContext context, IConfiguration configuration)
 {
     public IActionResult Get()
     {
@@ -89,22 +89,17 @@ public class QuotationService(DatabaseContext context)
     {
         try
         {
-            var _configuration = new Dictionary<string, string>
-            {
-                { "testEmail", "your_email@exmp.com" },
-                { "Email:From", "Blis Digital" },
-                { "Email:SMTPUserName", "visconticketsystemhelp@gmail.com" },
-                { "Email:SMTPPassword", "gcph mqwe csfx oxdj " }
-            };
-            
-            string receiverEmail = !string.IsNullOrEmpty(email) ? email : _configuration["testEmail"];
-            var senderName = _configuration["Email:From"]!.ToString();
-            var senderEmail = _configuration["Email:SMTPUserName"]!.ToString();
-            var password = _configuration["Email:SMTPPasssword"]!.ToString();
+            if (configuration["Email:From"] == null || configuration["Email:Username"] == null 
+                                                    || configuration["Email:Password"] == null
+                                                    || configuration["Email:Test"] == null) return false;
+            var receiverEmail = string.IsNullOrEmpty(email) ? email : configuration["Test"];
+            var senderName = configuration["Email:From"];
+            var senderEmail = configuration["Email:Username"];
+            var password = configuration["Email:Password"];
             var fromAddress = new MailAddress(senderEmail, senderName);
             var toAddress = new MailAddress(receiverEmail);
             var pdf = GeneratePdf(quotation);
-            Attachment attachment = new Attachment(pdf);
+            var attachment = new Attachment(pdf);
             
             using var smtpClient = new SmtpClient("smtp.gmail.com");
             smtpClient.Port = 587;
@@ -120,7 +115,7 @@ public class QuotationService(DatabaseContext context)
 
             return true;
         }
-        catch (SmtpException ex)
+        catch (SmtpException)
         {
             return false;
         }
@@ -128,14 +123,14 @@ public class QuotationService(DatabaseContext context)
     
     private string GeneratePdf(Quotation quotation)
     {
-        PdfDocument document = new PdfDocument();
+        var document = new PdfDocument();
         document.Info.Title = "Quotation";
 
-        PdfPage page = document.AddPage();
-        XGraphics gfx = XGraphics.FromPdfPage(page);
-        XFont font = new XFont("Arial", 12);
+        var page = document.AddPage();
+        var gfx = XGraphics.FromPdfPage(page);
+        var font = new XFont("Arial", 12);
 
-        XStringFormat format = new XStringFormat();
+        var format = new XStringFormat();
         format.Alignment = XStringAlignment.Near;
 
         gfx.DrawString("Quotation", font, XBrushes.Black, new XRect(0, 20, page.Width, 0), format);

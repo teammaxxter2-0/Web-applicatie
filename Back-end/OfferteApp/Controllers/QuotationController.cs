@@ -8,9 +8,9 @@ namespace OfferteApp.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class QuotationController(DatabaseContext context) : ControllerBase
+public class QuotationController(DatabaseContext context, IConfiguration configuration) : ControllerBase
 {
-    private readonly QuotationService _service = new(context);
+    private readonly QuotationService _service = new(context, configuration);
 
     [Authorize]
     [HttpGet]
