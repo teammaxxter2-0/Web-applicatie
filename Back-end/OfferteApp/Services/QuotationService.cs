@@ -123,60 +123,98 @@ public class QuotationService(DatabaseContext context, IConfiguration configurat
     
     private string GeneratePdf(Quotation quotation)
     {
-        var document = new PdfDocument();
-        document.Info.Title = "Quotation";
+        try
+        {
+            var document = new PdfDocument();
+            document.Info.Title = "Blis Digital";
 
-        var page = document.AddPage();
-        var gfx = XGraphics.FromPdfPage(page);
-        var font = new XFont("Arial", 12);
+            var page = document.AddPage();
+            var gfx = XGraphics.FromPdfPage(page);
+            var font = new XFont("Arial", 12, XFontStyleEx.Bold);
 
-        var format = new XStringFormat();
-        format.Alignment = XStringAlignment.Near;
+            gfx.DrawString("Blis Digital", font, XBrushes.Black,
+                new XRect(0, 20, page.Width, 0),
+                XStringFormats.TopCenter);
+            gfx.DrawString("ID: 102123", font, XBrushes.Black,
+                new XRect(0, 20, page.Width, 0),
+                XStringFormats.TopRight);
 
-        gfx.DrawString("Quotation", font, XBrushes.Black, new XRect(0, 20, page.Width, 0), format);
+            font = new XFont("Arial", 10, XFontStyleEx.Bold);
+            gfx.DrawString("Item", font, XBrushes.Black,
+                new XRect(40, 60, 200, 20),
+                XStringFormats.TopLeft);
+            gfx.DrawString("Amount", font, XBrushes.Black,
+                new XRect(240, 60, 100, 20),
+                XStringFormats.TopLeft);
+            gfx.DrawString("Price", font, XBrushes.Black,
+                new XRect(340, 60, 100, 20),
+                XStringFormats.TopLeft);
 
-        string details = $"Name: {quotation.Name}\n" +
-                         $"Total Price: {quotation.OffertePrijsTotaal}\n" +
-                         $"Aantal m2: {quotation.AantalM2}\n" +
-                         $"Prijs per m2: {quotation.PrijsPerM2}\n" +
-                         $"Prijs m2 totaal: {quotation.PrijsM2Totaal}\n" +
-                         $"Randafwerking: {(quotation.Randafwerking ? "Yes" : "No")}\n" +
-                         $"Randafwerking m: {quotation.RandafwerkingM}\n" +
-                         $"Randafwerking prijs per m: {quotation.RandafwerkingPrijsPerM}\n" +
-                         $"Randafwerking hoogte mm: {quotation.RandafwerkingHoogteMm}\n" +
-                         $"Randafwerking prijs totaal: {quotation.RandafwerkingPrijsTotaal}\n" +
-                         $"Spatrand m: {quotation.SpatrandM}\n" +
-                         $"Spatrand prijs per m: {quotation.SpatrandPrijsPerM}\n" +
-                         $"Spatrand hoogte mm: {quotation.SpatrandHoogteMm}\n" +
-                         $"Spatrand prijs totaal: {quotation.SpatrandPrijsTotaal}\n" +
-                         $"Vensterbank m: {quotation.VensterbankM}\n" +
-                         $"Vensterbank prijs per m: {quotation.VensterbankPrijsPerM}\n" +
-                         $"Vensterbank breedte mm: {quotation.VensterbankBreedteMm}\n" +
-                         $"Vensterbank prijs totaal: {quotation.VensterbankPrijsTotaal}\n" +
-                         $"Spoelbak: {(quotation.Spoelbak ? "Yes" : "No")}\n" +
-                         $"Uitsparing spoelbak: {quotation.UitsparingSpoelbak}\n" +
-                         $"Spoelbak prijs: {quotation.SpoelbakPrijs}\n" +
-                         $"Kraangat: {(quotation.Kraangat ? "Yes" : "No")}\n" +
-                         $"Kraangat prijs: {quotation.KraangatPrijs}\n" +
-                         $"Zeepdispenser: {(quotation.Zeepdispenser ? "Yes" : "No")}\n" +
-                         $"Zeepdispenser prijs: {quotation.ZeepdispenserPrijs}\n" +
-                         $"Boorgaten: {(quotation.Boorgaten ? "Yes" : "No")}\n" +
-                         $"Boorgaten stuk: {quotation.BoorgatenStuk}\n" +
-                         $"Boorgaten mm: {quotation.BoorgatenMm}\n" +
-                         $"Boorgaten prijs per stuk: {quotation.BoorgatenPrijsPerStuk}\n" +
-                         $"Boorgaten prijs totaal: {quotation.BoorgatenPrijsTotaal}\n" +
-                         $"WCD: {(quotation.WCD ? "Yes" : "No")}\n" +
-                         $"WCD prijs: {quotation.WCDPrijs}\n" +
-                         $"Achterwand: {(quotation.Achterwand ? "Yes" : "No")}\n" +
-                         $"Achterwand m2: {quotation.AchterwandM2}\n" +
-                         $"Achterwand prijs per m2: {quotation.AchterwandPrijsPerM2}\n" +
-                         $"Achterwand prijs totaal: {quotation.AchterwandPrijsTotaal}\n" +
-                         $"Offerte prijs totaal: {quotation.OffertePrijsTotaal}";
-        
-        gfx.DrawString(details, font, XBrushes.Black, new XRect(40, 40, page.Width - 80, page.Height - 40), format);
-        var file_loc = $"../PDF/Quote_{quotation.OffertePrijsTotaal}.pdf";
-        document.Save(file_loc);
-        document.Close();
-        return file_loc;
+            font = new XFont("Arial", 10);
+            int yOffset = 80;
+            DrawGridRow(gfx, font, quotation.name, "", "", yOffset);
+            yOffset += 20;
+            DrawGridRow(gfx, font, "Grote", quotation.aantal_m2.ToString()+"m2", quotation.prijs_m2_totaal.ToString("C"),
+                yOffset);
+            yOffset += 20;
+            DrawGridRow(gfx, font, "Randafwerking", quotation.randafwerking ? "Yes" : "No",
+                quotation.randafwerking_prijs_totaal.ToString("C"), yOffset);
+            yOffset += 20;
+            DrawGridRow(gfx, font, "Spatrand", quotation.spatrand_hoogte_mm.ToString()+"mm",
+                quotation.spatrand_prijs_totaal.ToString("C"), yOffset);
+            yOffset += 20;
+            DrawGridRow(gfx, font, "Vensterbank", quotation.vensterbank_m.ToString()+"m",
+                quotation.vensterbank_prijs_totaal.ToString("C"), yOffset);
+            yOffset += 20;
+            DrawGridRow(gfx, font, "Spoelbak", quotation.spoelbak ? quotation.uitsparing_spoelbak : "No",
+                quotation.spoelbak_prijs.ToString("C"), yOffset);
+            yOffset += 20;
+            DrawGridRow(gfx, font, "Kraangat", quotation.kraangat ? "Yes" : "No",
+                quotation.kraangat_prijs.ToString("C"), yOffset);
+            yOffset += 20;
+            DrawGridRow(gfx, font, "Zeepdispenser", quotation.zeepdispenser ? "Yes" : "No",
+                quotation.zeepdispenser_prijs.ToString("C"), yOffset);
+            yOffset += 20;
+            DrawGridRow(gfx, font, "Boorgaten", quotation.boorgaten_stuk.ToString(),
+                quotation.bootgaten_prijs_totaal.ToString("C"), yOffset);
+            yOffset += 20;
+            DrawGridRow(gfx, font, "WCD", quotation.wcd ? "Yes" : "No", quotation.wcd_prijs.ToString("C"), yOffset);
+            yOffset += 20;
+            DrawGridRow(gfx, font, "Achterwand", quotation.acherwand_m2.ToString()+"m2",
+                quotation.achterwand_prijs_totaal.ToString("C"), yOffset);
+
+            gfx.DrawString($"Total Price: {quotation.offerte_prijs_totaal}", font, XBrushes.Black,
+                new XRect(340, yOffset + 20, 200, 20),
+                XStringFormats.TopLeft);
+
+            font = new XFont("Arial", 8);
+            gfx.DrawString("Generated by YourCompany", font, XBrushes.Gray,
+                new XRect(0, page.Height - 30, page.Width, 20),
+                XStringFormats.BottomCenter);
+
+            var pdfPath = $".\\PDF\\Quote_{offerte_prijs_totaal}.pdf";
+            document.Save(pdfPath);
+            document.Close();
+
+            return pdfPath;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error: {ex.Message}");
+        }
+
+        return "Failed";
+    } 
+    private static void DrawGridRow(XGraphics gfx, XFont font, string item, string amount, string price, int yOffset) 
+    { 
+        gfx.DrawString(item, font, XBrushes.Black,
+            new XRect(40, yOffset, 200, 20),
+            XStringFormats.TopLeft);
+        gfx.DrawString(amount, font, XBrushes.Black,
+            new XRect(240, yOffset, 100, 20),
+            XStringFormats.TopLeft);
+        gfx.DrawString(price, font, XBrushes.Black,
+            new XRect(340, yOffset, 100, 20),
+            XStringFormats.TopLeft); 
     }
 }
