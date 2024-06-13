@@ -1,3 +1,5 @@
+using System.Net;
+using System.Net.Mail;
 using Microsoft.AspNetCore.Mvc;
 using OfferteApp.Data;
 using OfferteApp.Models;
@@ -76,7 +78,48 @@ public class QuotationService(DatabaseContext context)
         var quote = context.Quotations.FirstOrDefault(u => u.Id == id);
         if (quote == null) return false;
         quote.Accepted = true;
+        SendEmail(quote);
         context.Quotations.Update(quote);
         return context.SaveChanges() > 0;
+    }
+    
+    private bool SendEmail(Quotation quotation, string email="")
+    {
+        try
+        {
+            var _configuration = new Dictionary<string, string>
+            {
+                { "testEmail", "your_email@exmp.com" },
+                { "Email:From", "Blis Digital" },
+                { "Email:SMTPUserName", "visconticketsystemhelp@gmail.com" },
+                { "Email:SMTPPassword", "gcph mqwe csfx oxdj " }
+            };
+            
+            string receiverEmail = !string.IsNullOrEmpty(email) ? email : _configuration["testEmail"];
+            var senderName = _configuration["Email:From"]!.ToString();
+            var senderEmail = _configuration["Email:SMTPUserName"]!.ToString();
+            var password = _configuration["Email:SMTPPasssword"]!.ToString();
+            var fromAddress = new MailAddress(senderEmail, senderName);
+            var toAddress = new MailAddress(receiverEmail);
+            Attachment attachment = new Attachment("file.pdf");
+            
+            using var smtpClient = new SmtpClient("smtp.gmail.com");
+            smtpClient.Port = 587;
+            smtpClient.Credentials =
+                new NetworkCredential(fromAddress.Address, password);
+            smtpClient.EnableSsl = true;
+
+            using var message = new MailMessage(fromAddress, toAddress);
+            message.Subject = "Quote";
+            message.Body = "Leuke body...";
+            message.Attachments.Add(attachment);
+            smtpClient.SendMailAsync(message);
+
+            return true;
+        }
+        catch (SmtpException ex)
+        {
+            return false;
+        }
     }
 }
