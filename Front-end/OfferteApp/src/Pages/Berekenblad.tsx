@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import Navbar from "../Components/Navbar.tsx";
-import { useParams } from "react-router-dom";
+import { useParams,  useNavigate } from "react-router-dom";
 import useOptions from "../hooks/Options.ts";
 import { Bestelling } from "../interfaces/Bestelling.ts";
 import TableView from "../Components/TableView.tsx";
@@ -8,12 +8,21 @@ import CalculateTotal from "../Components/CalculateTotal.tsx";
 import { Material } from "../interfaces/Materiaalsoort.ts";
 import "../Styles/berekenblad.css";
 import MakeQuote from "../hooks/MakeQuote.ts";
+import { Modal, Button , message} from 'antd';
 
 function BerekenBlad() {
     const params = useParams<{ id: string }>();
     const [bestelling, setBestelling] = useState<Bestelling>();
     const material: Material = useOptions(params.id ?? "");
+    const [isViewModalVisible, setIsViewModalVisible] = useState<boolean>(false);
+    const navigate = useNavigate();
+    const handleViewModalClose = () => {
+        setIsViewModalVisible(false);
 
+    };
+    const handleShowInfo = () => {
+        setIsViewModalVisible(true);
+    };
     useEffect(() => {
         if (params === undefined || params.id === undefined) return;
 
@@ -85,11 +94,22 @@ function BerekenBlad() {
     const handleBestelling = (e: React.FormEvent) => {
         e.preventDefault();
 
-        if(bestelling !== undefined)
+        if (bestelling !== undefined)
             MakeQuote(bestelling);
         else
             alert('Bestelling bestaat niet');
     }
+
+    const handleModalSubmit = () => {
+        if (bestelling !== undefined) {
+            MakeQuote(bestelling);
+            message.success("Bestelling afgerond!");
+       
+            navigate("/"); 
+        } else {
+            message.error("Bestelling bestaat niet")
+        }
+    };
 
     return (
         <>
@@ -242,23 +262,48 @@ function BerekenBlad() {
                                 </label>
                             )}
                             {material?.randafwerking && (
-                            <label>
-                                Voer het aantal vierkante meters achterwand in:
-                                <input
-                                    type="number"
-                                    value={bestelling?.achterwand_m2}
-                                    onChange={(e) => updateBestellingAttribute("achterwand_m2", parseFloat(e.target.value))}
-                                    min="0"
-                                    step="0.01"
-                                />
-                            </label>
+                                <label>
+                                    Voer het aantal vierkante meters achterwand in:
+                                    <input
+                                        type="number"
+                                        value={bestelling?.achterwand_m2}
+                                        onChange={(e) => updateBestellingAttribute("achterwand_m2", parseFloat(e.target.value))}
+                                        min="0"
+                                        step="0.01"
+                                    />
+                                </label>
                             )}
-                            <button type={"submit"}>Vraag aan</button>
+                            <Button key="See Modal" onClick={handleShowInfo}>
+                                Vraag aan
+                            </Button>,
+                             
                         </form>
                     </div>
                     <div className={"col-sm"}>
-                        <TableView viewObject={bestelling}/>
+                        <TableView viewObject={bestelling} />
                     </div>
+                    <Modal
+                        title="Aanvraag"
+                        open={isViewModalVisible}
+                        onCancel={handleViewModalClose}
+                        width={600}
+                        footer={[
+                            <Button key="final" type="primary"  onClick={handleModalSubmit}>
+                                Rond bestelling af
+                            </Button>,
+                            
+                            <Button key="close" onClick={handleViewModalClose}>
+                                Terug
+                            </Button>,
+                        ]}
+                    >
+
+                        <div>
+
+                            <p><strong>Weet u zeker dat u uw bestelling wilt afronden?</strong> </p>
+                        </div>
+
+                    </Modal>
                 </div>
             </div>
         </>

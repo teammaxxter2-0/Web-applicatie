@@ -203,7 +203,7 @@ function AdminSeeOffertes() {
         {error && <p>{error}</p>}
         {!loading && !error && (
           <>
-            <Table columns={columns} dataSource={bestellingen} pagination={{ pageSize: 7 }} />
+            <Table columns={columns} dataSource={bestellingen}  pagination={{ pageSize: 7, showSizeChanger: false }}  />
           </>
         )}
         <Button type="primary" style={{ marginLeft: 55 }} onClick={() => navigate(-1)}>
@@ -227,7 +227,7 @@ function AdminSeeOffertes() {
           <p><strong>Aangemaakt op:</strong> {selectedOption.creation === undefined ? "Geen tijd bekend" : selectedOption.creation.toLocaleString()}</p>
           <p><strong>Geaccepteerd:</strong> {selectedOption.accepted ? "Ja" : "Nee"}</p>
           <p><strong>Aantal m2:</strong> {selectedOption.aantal_m2}</p>
-          <p><strong>Prijs per m2:</strong> €{selectedOption.prijs_per_m2}</p>
+          {/* <p><strong>Prijs per m2:</strong> €{selectedOption.prijs_per_m2}</p>
           <p><strong>Prijs m2 Totaal:</strong> €{selectedOption.prijs_m2_totaal}</p>
           <p><strong>Randafwerking:</strong> {selectedOption.randafwerking ? 'Ja' : 'Nee'}</p>
           <p><strong>Randafwerking m:</strong> {selectedOption.randafwerking_m}</p>
@@ -259,7 +259,7 @@ function AdminSeeOffertes() {
           <p><strong>Achterwand:</strong> {selectedOption.achterwand ? 'Ja' : 'Nee'}</p>
           <p><strong>Achterwand m2:</strong> {selectedOption.achterwand_m2}</p>
           <p><strong>Achterwand Prijs per m2:</strong> €{selectedOption.achterwand_prijs_per_m2}</p>
-          <p><strong>Achterwand Prijs Totaal:</strong> €{selectedOption.achterwand_prijs_totaal}</p>
+          <p><strong>Achterwand Prijs Totaal:</strong> €{selectedOption.achterwand_prijs_totaal}</p> */}
           <p><strong>Offerte Prijs Totaal:</strong> €{selectedOption.offerte_prijs_totaal}</p>
           <Flex gap="middle" justify='center' >
             <Button
