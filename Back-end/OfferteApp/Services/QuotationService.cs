@@ -125,76 +125,68 @@ public class QuotationService(DatabaseContext context, IConfiguration configurat
     {
         try
         {
+            var rand = new Random();
             var document = new PdfDocument();
             document.Info.Title = "Blis Digital";
-
             var page = document.AddPage();
             var gfx = XGraphics.FromPdfPage(page);
-            var font = new XFont("Arial", 12, XFontStyleEx.Bold);
+            var font = new XFont("Arial", 12, XFontStyle.Bold);
 
-            gfx.DrawString("Blis Digital", font, XBrushes.Black,
-                new XRect(0, 20, page.Width, 0),
-                XStringFormats.TopCenter);
-            gfx.DrawString("ID: 102123", font, XBrushes.Black,
-                new XRect(0, 20, page.Width, 0),
-                XStringFormats.TopRight);
 
-            font = new XFont("Arial", 10, XFontStyleEx.Bold);
-            gfx.DrawString("Item", font, XBrushes.Black,
-                new XRect(40, 60, 200, 20),
-                XStringFormats.TopLeft);
-            gfx.DrawString("Amount", font, XBrushes.Black,
-                new XRect(240, 60, 100, 20),
-                XStringFormats.TopLeft);
-            gfx.DrawString("Price", font, XBrushes.Black,
-                new XRect(340, 60, 100, 20),
-                XStringFormats.TopLeft);
+            gfx.DrawString("Blis Digital", font, XBrushes.Black, new XRect(0, 20, page.Width, 0), XStringFormats.TopCenter);
+            gfx.DrawString($"ID: {rand.next(100, 100000)}", font, XBrushes.Black, new XRect(0, 40, page.Width, 0), XStringFormats.TopCenter);
+
+
+            font = new XFont("Arial", 10, XFontStyle.Bold);
+            gfx.DrawString("Item", font, XBrushes.Black, new XRect(40, 60, 200, 20), XStringFormats.TopLeft);
+            gfx.DrawString("Amount", font, XBrushes.Black, new XRect(240, 60, 100, 20), XStringFormats.TopLeft);
+            gfx.DrawString("Price", font, XBrushes.Black, new XRect(340, 60, 100, 20), XStringFormats.TopLeft);
+
 
             font = new XFont("Arial", 10);
+
             int yOffset = 80;
-            DrawGridRow(gfx, font, quotation.name, "", "", yOffset);
+            DrawGridRow(gfx, font, "Name", quotation.Name, "", yOffset);
             yOffset += 20;
-            DrawGridRow(gfx, font, "Grote", quotation.aantal_m2.ToString()+"m2", quotation.prijs_m2_totaal.ToString("C"),
+            DrawGridRow(gfx, font, "AantalM2", $"{quotation.AantalM2}m2", quotation.PrijsM2Totaal.ToString("C"),
                 yOffset);
             yOffset += 20;
-            DrawGridRow(gfx, font, "Randafwerking", quotation.randafwerking ? "Yes" : "No",
-                quotation.randafwerking_prijs_totaal.ToString("C"), yOffset);
+            DrawGridRow(gfx, font, "Randafwerking", quotation.Randafwerking ? "Yes" : "No",
+                quotation.RandafwerkingPrijsTotaal.ToString("C"), yOffset);
             yOffset += 20;
-            DrawGridRow(gfx, font, "Spatrand", quotation.spatrand_hoogte_mm.ToString()+"mm",
-                quotation.spatrand_prijs_totaal.ToString("C"), yOffset);
+            DrawGridRow(gfx, font, "Spatrand", $"{quotation.SpatrandHoogteMm}mm",
+                quotation.SpatrandPrijsTotaal.ToString("C"), yOffset);
             yOffset += 20;
-            DrawGridRow(gfx, font, "Vensterbank", quotation.vensterbank_m.ToString()+"m",
-                quotation.vensterbank_prijs_totaal.ToString("C"), yOffset);
+            DrawGridRow(gfx, font, "Vensterbank", $"{quotation.VensterbankM}m",
+                quotation.VensterbankPrijsTotaal.ToString("C"), yOffset);
             yOffset += 20;
-            DrawGridRow(gfx, font, "Spoelbak", quotation.spoelbak ? quotation.uitsparing_spoelbak : "No",
-                quotation.spoelbak_prijs.ToString("C"), yOffset);
+            DrawGridRow(gfx, font, "Spoelbak", quotation.Spoelbak ? quotation.UitsparingSpoelbak : "No",
+                quotation.SpoelbakPrijs.ToString("C"), yOffset);
             yOffset += 20;
-            DrawGridRow(gfx, font, "Kraangat", quotation.kraangat ? "Yes" : "No",
-                quotation.kraangat_prijs.ToString("C"), yOffset);
+            DrawGridRow(gfx, font, "Kraangat", quotation.Kraangat ? "Yes" : "No",
+                quotation.KraangatPrijs.ToString("C"), yOffset);
             yOffset += 20;
-            DrawGridRow(gfx, font, "Zeepdispenser", quotation.zeepdispenser ? "Yes" : "No",
-                quotation.zeepdispenser_prijs.ToString("C"), yOffset);
+            DrawGridRow(gfx, font, "Zeepdispenser", quotation.Zeepdispenser ? "Yes" : "No",
+                quotation.ZeepdispenserPrijs.ToString("C"), yOffset);
             yOffset += 20;
-            DrawGridRow(gfx, font, "Boorgaten", quotation.boorgaten_stuk.ToString(),
-                quotation.bootgaten_prijs_totaal.ToString("C"), yOffset);
+            DrawGridRow(gfx, font, "Boorgaten", quotation.BoorgatenStuk.ToString(),
+                quotation.BoorgatenPrijsTotaal.ToString("C"), yOffset);
             yOffset += 20;
-            DrawGridRow(gfx, font, "WCD", quotation.wcd ? "Yes" : "No", quotation.wcd_prijs.ToString("C"), yOffset);
+            DrawGridRow(gfx, font, "WCD", quotation.WCD ? "Yes" : "No", quotation.WCDPrijs.ToString("C"), yOffset);
             yOffset += 20;
-            DrawGridRow(gfx, font, "Achterwand", quotation.acherwand_m2.ToString()+"m2",
-                quotation.achterwand_prijs_totaal.ToString("C"), yOffset);
+            DrawGridRow(gfx, font, "Achterwand", $"{quotation.AchterwandM2}m2",
+                quotation.AchterwandPrijsTotaal.ToString("C"), yOffset);
 
-            gfx.DrawString($"Total Price: {quotation.offerte_prijs_totaal}", font, XBrushes.Black,
-                new XRect(340, yOffset + 20, 200, 20),
-                XStringFormats.TopLeft);
+            gfx.DrawString($"Total Price: {quotation.OffertePrijsTotaal}", font, XBrushes.Black, new XRect(340, yOffset + 20, 200, 20), XStringFormats.TopLeft);
+
 
             font = new XFont("Arial", 8);
-            gfx.DrawString("Generated by YourCompany", font, XBrushes.Gray,
-                new XRect(0, page.Height - 30, page.Width, 20),
-                XStringFormats.BottomCenter);
+            gfx.DrawString("Generated by Blis Digital HRO Department", font, XBrushes.Gray, new XRect(0, page.Height - 30, page.Width, 20), XStringFormats.BottomCenter);
 
-            var pdfPath = $".\\PDF\\Quote_{offerte_prijs_totaal}.pdf";
+            var pdfPath = $".\\PDF\\Quote_{quotation.OffertePrijsTotaal}.pdf";
             document.Save(pdfPath);
             document.Close();
+
 
             return pdfPath;
         }
