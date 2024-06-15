@@ -80,45 +80,66 @@ public class QuotationService(DatabaseContext context, IConfiguration configurat
         var quote = context.Quotations.FirstOrDefault(u => u.Id == id);
         if (quote == null) return false;
         quote.Accepted = true;
-        SendEmail(quote);
+        Console.WriteLine(SendEmail(quote));
         context.Quotations.Update(quote);
         return context.SaveChanges() > 0;
     }
     
     private bool SendEmail(Quotation quotation, string email="")
     {
-        try
-        {
-            if (configuration["Email:From"] == null || configuration["Email:Username"] == null 
-                                                    || configuration["Email:Password"] == null
-                                                    || configuration["Email:Test"] == null) return false;
+            if (configuration["Email:From"] == null 
+                || configuration["Email:Username"] == null 
+                || configuration["Email:Password"] == null
+                || configuration["Email:Test"] == null) return false;
             var receiverEmail = string.IsNullOrEmpty(email) ? email : configuration["Test"];
             var senderName = configuration["Email:From"];
             var senderEmail = configuration["Email:Username"];
             var password = configuration["Email:Password"];
             var fromAddress = new MailAddress(senderEmail, senderName);
             var toAddress = new MailAddress(receiverEmail);
-            var pdf = GeneratePdf(quotation);
-            var attachment = new Attachment(pdf);
-            
-            using var smtpClient = new SmtpClient("smtp.gmail.com");
-            smtpClient.Port = 587;
-            smtpClient.Credentials =
-                new NetworkCredential(fromAddress.Address, password);
-            smtpClient.EnableSsl = true;
+            var subject = "Hello from code!";
+            var body = "Lorem ipsum dolor sit amet...";
 
-            using var message = new MailMessage(fromAddress, toAddress);
-            message.Subject = "Quote";
-            message.Body = "Leuke body...";
-            message.Attachments.Add(attachment);
-            smtpClient.SendMailAsync(message);
+            try
+            {
+                using (var client = new SmtpClient("smtp.gmail.com", 465))
+                {
+                    client.Credentials = new NetworkCredential(senderEmail, password);
+                    client.EnableSsl = false;
+                    client.DeliveryMethod = SmtpDeliveryMethod.Network;
+                    client.UseDefaultCredentials = false;
 
-            return true;
-        }
-        catch (SmtpException)
-        {
-            return false;
-        }
+                    using (var message = new MailMessage(fromAddress, toAddress)
+                           {
+                               Subject = subject,
+                               Body = body
+                           })
+                    {
+                        // Attach PDF if needed
+                        var pdf = GeneratePdf(quotation);
+                        var attachment = new Attachment(pdf);
+                        message.Attachments.Add(attachment);
+
+                        client.Send(message);
+                    }
+                }
+
+                return true;
+            }
+            catch (SmtpException ex)
+            {
+                Console.WriteLine($"SMTP error: {ex.StatusCode} - {ex.Message}");
+                if (ex.InnerException != null)
+                {
+                    Console.WriteLine($"Inner exception: {ex.InnerException.Message}");
+                }
+                return false;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error sending email: {ex.Message}");
+                return false;
+            }
     }
     
     private string GeneratePdf(Quotation quotation)
@@ -126,6 +147,7 @@ public class QuotationService(DatabaseContext context, IConfiguration configurat
         try
         {
             var rand = new Random();
+            var id = rand.Next(100, 10000000);
             var document = new PdfDocument();
             document.Info.Title = "Blis Digital";
             var page = document.AddPage();
@@ -134,7 +156,7 @@ public class QuotationService(DatabaseContext context, IConfiguration configurat
 
 
             gfx.DrawString("Blis Digital", font, XBrushes.Black, new XRect(0, 20, page.Width, 0), XStringFormats.TopCenter);
-            gfx.DrawString($"ID: {rand.Next(100, 100000)}", font, XBrushes.Black, new XRect(0, 40, page.Width, 0), XStringFormats.TopCenter);
+            gfx.DrawString($"ID: {id}", font, XBrushes.Black, new XRect(0, 40, page.Width, 0), XStringFormats.TopCenter);
 
 
             font = new XFont("Arial", 10);
@@ -183,11 +205,9 @@ public class QuotationService(DatabaseContext context, IConfiguration configurat
             font = new XFont("Arial", 8);
             gfx.DrawString("Generated by Blis Digital HRO Department", font, XBrushes.Gray, new XRect(0, page.Height - 30, page.Width, 20), XStringFormats.BottomCenter);
 
-            var pdfPath = $".\\PDF\\Quote_{quotation.OffertePrijsTotaal}.pdf";
+            var pdfPath = $".\\PDF\\Quote_{id}.pdf";
             document.Save(pdfPath);
             document.Close();
-
-
             return pdfPath;
         }
         catch (Exception ex)
