@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import Navbar from "../Components/Navbar.tsx";
-import { useParams,  useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import useOptions from "../hooks/Options.ts";
 import { Bestelling } from "../interfaces/Bestelling.ts";
 import TableView from "../Components/TableView.tsx";
@@ -8,7 +8,10 @@ import CalculateTotal from "../Components/CalculateTotal.tsx";
 import { Material } from "../interfaces/Materiaalsoort.ts";
 import "../Styles/berekenblad.css";
 import MakeQuote from "../hooks/MakeQuote.ts";
-import { Modal, Button , message} from 'antd';
+import { Modal, Button, message, InputNumber, Select, Form, Row, Col, Divider} from 'antd';
+
+
+const { Option } = Select;
 
 function BerekenBlad() {
     const params = useParams<{ id: string }>();
@@ -16,13 +19,15 @@ function BerekenBlad() {
     const material: Material = useOptions(params.id ?? "");
     const [isViewModalVisible, setIsViewModalVisible] = useState<boolean>(false);
     const navigate = useNavigate();
+
     const handleViewModalClose = () => {
         setIsViewModalVisible(false);
-
     };
+
     const handleShowInfo = () => {
         setIsViewModalVisible(true);
     };
+
     useEffect(() => {
         if (params === undefined || params.id === undefined) return;
 
@@ -81,8 +86,12 @@ function BerekenBlad() {
         };
 
         setBestelling(updatedBestelling);
-    }, [bestelling?.aantal_m2, bestelling?.randafwerking_m, bestelling?.achterwand_m2, bestelling?.spatrand_m, bestelling?.achterwand_m2, bestelling?.vensterbank_m, bestelling?.spoelbak,
-    bestelling?.kraangat, bestelling?.zeepdispenser, bestelling?.boorgaten_stuk, bestelling?.wcd]);
+    }, [
+        bestelling?.aantal_m2, bestelling?.randafwerking_m, bestelling?.achterwand_m2, 
+        bestelling?.spatrand_m, bestelling?.vensterbank_m, bestelling?.spoelbak,
+        bestelling?.kraangat, bestelling?.zeepdispenser, bestelling?.boorgaten_stuk, 
+        bestelling?.wcd
+    ]);
 
     const updateBestellingAttribute = <K extends keyof Bestelling>(key: K, value: Bestelling[K]) => {
         setBestelling(prevState => {
@@ -98,213 +107,207 @@ function BerekenBlad() {
             MakeQuote(bestelling);
         else
             alert('Bestelling bestaat niet');
-    }
+    };
 
     const handleModalSubmit = () => {
         if (bestelling !== undefined) {
             MakeQuote(bestelling);
             message.success("Bestelling afgerond!");
-       
-            navigate("/"); 
+            navigate("/");
         } else {
-            message.error("Bestelling bestaat niet")
+            message.error("Bestelling bestaat niet");
         }
     };
 
     return (
         <>
             <Navbar />
-            <div className={"container"}>
-                <div className="row">
-                    <div className={"col-sm"}>
-                        <h1>Bereken uw keukenblad</h1>
-                        <form onSubmit={handleBestelling}>
-                            <label>Materiaal: {bestelling?.name}</label>
-                            <label>
-                                Voer het aantal vierkante meters in:
-                                <input
-                                    type="number"
+            <div className="container">
+                
+                <Row gutter={200}>
+                    
+                    <Col span={12}>
+                        
+                        <Form onSubmitCapture={handleBestelling} layout="vertical">
+                            <h1 ></h1>
+                            <Form.Item label="" style={{ marginTop: '50px'}}>
+                                <h3>{bestelling?.name}</h3>
+                                <Divider />
+                            </Form.Item>
+                            <Form.Item label="Voer het aantal vierkante meters in:">
+                                <InputNumber
                                     value={bestelling?.aantal_m2}
-                                    onChange={(e) => updateBestellingAttribute("aantal_m2", parseFloat(e.target.value))}
-                                    min="0"
-                                    step="0.01"
+                                    onChange={(value) => updateBestellingAttribute("aantal_m2", value || 0)}
+                                    min={0}
+                                    step={0.01}
+                                    style={{ width: '100%' }}
                                 />
-                            </label>
+                            </Form.Item>
                             {bestelling?.randafwerking && (
-                                <label>
-                                    Voer het aantal meters randafwerking in:
-                                    <input
-                                        type="number"
-                                        value={bestelling?.randafwerking_m}
-                                        onChange={(e) => updateBestellingAttribute("randafwerking_m", parseFloat(e.target.value))}
-                                        min="0"
-                                        step="0.01"
-                                    />
-                                </label>
+                                <>
+                                    <Form.Item label="Voer het aantal meters randafwerking in:">
+                                        <InputNumber
+                                            value={bestelling?.randafwerking_m}
+                                            onChange={(value) => updateBestellingAttribute("randafwerking_m", value || 0)}
+                                            min={0}
+                                            step={0.01}
+                                            style={{ width: '100%' }}
+                                        />
+                                    </Form.Item>
+                                    <Form.Item label="Voer de hoogte van de randafwerking in (mm):">
+                                        <InputNumber
+                                            value={bestelling?.randafwerking_hoogte_mm}
+                                            onChange={(value) => updateBestellingAttribute("randafwerking_hoogte_mm", value || 0)}
+                                            min={0}
+                                            step={1}
+                                            style={{ width: '100%' }}
+                                        />
+                                    </Form.Item>
+                                </>
                             )}
-                            {bestelling?.randafwerking && (
-                                <label>
-                                    Voer de hoogte van de randafwerking in (mm):
-                                    <input
-                                        type="number"
-                                        value={bestelling?.randafwerking_hoogte_mm}
-                                        onChange={(e) => updateBestellingAttribute("randafwerking_hoogte_mm", parseFloat(e.target.value))}
-                                        min="0"
-                                        step="1"
-                                    />
-                                </label>
-                            )}
-                            <label>
-                                Voer het aantal meters spatrand in:
-                                <input
-                                    type="number"
+                            <Form.Item label="Voer het aantal meters spatrand in:">
+                                <InputNumber
                                     value={bestelling?.spatrand_m}
-                                    onChange={(e) => updateBestellingAttribute("spatrand_m", parseFloat(e.target.value))}
-                                    min="0"
-                                    step="0.01"
+                                    onChange={(value) => updateBestellingAttribute("spatrand_m", value || 0)}
+                                    min={0}
+                                    step={0.01}
+                                    style={{ width: '100%' }}
                                 />
-                            </label>
-                            <label>
-                                Voer de hoogte van de spatrand in (mm) (tussen 0 en 150):
-                                <input
-                                    type="number"
+                            </Form.Item>
+                            <Form.Item label="Voer de hoogte van de spatrand in (mm) (tussen 0 en 150):">
+                                <InputNumber
                                     value={bestelling?.spatrand_hoogte_mm}
-                                    onChange={(e) => updateBestellingAttribute("spatrand_hoogte_mm", parseFloat(e.target.value))}
-                                    min="0"
-                                    max="150"
-                                    step="1"
+                                    onChange={(value) => updateBestellingAttribute("spatrand_hoogte_mm", value || 0)}
+                                    min={0}
+                                    max={150}
+                                    step={1}
+                                    style={{ width: '100%' }}
                                 />
-                            </label>
-                            <label>
-                                Voer het aantal meters vensterbank in:
-                                <input
-                                    type="number"
+                            </Form.Item>
+                            <Form.Item label="Voer het aantal meters vensterbank in:">
+                                <InputNumber
                                     value={bestelling?.vensterbank_m}
-                                    onChange={(e) => updateBestellingAttribute("vensterbank_m", parseFloat(e.target.value))}
-                                    min="0"
-                                    step="0.01"
+                                    onChange={(value) => updateBestellingAttribute("vensterbank_m", value || 0)}
+                                    min={0}
+                                    step={0.01}
+                                    style={{ width: '100%' }}
                                 />
-                            </label>
-                            <label>
-                                Voer de breedte van de vensterbank in (mm):
-                                <input
-                                    type="number"
+                            </Form.Item>
+                            <Form.Item label="Voer de breedte van de vensterbank in (mm):">
+                                <InputNumber
                                     value={bestelling?.vensterbank_breedte_mm}
-                                    onChange={(e) => updateBestellingAttribute("vensterbank_breedte_mm", parseFloat(e.target.value))}
-                                    min="0"
-                                    step="1"
+                                    onChange={(value) => updateBestellingAttribute("vensterbank_breedte_mm", value || 0)}
+                                    min={0}
+                                    step={1}
+                                    style={{ width: '100%' }}
                                 />
-                            </label>
-                            <label>
-                                Wilt u een spoelbak?
-                                <select
+                            </Form.Item>
+                            <Form.Item label="Wilt u een spoelbak?">
+                                <Select
                                     value={bestelling?.spoelbak ? "ja" : "nee"}
-                                    onChange={(e) => updateBestellingAttribute("spoelbak", e.target.value === "ja")}
+                                    onChange={(value) => updateBestellingAttribute("spoelbak", value === "ja")}
+                                    style={{ width: '70%' }}
                                 >
-                                    <option value="ja">Ja</option>
-                                    <option value="nee">Nee</option>
-                                </select>
-                            </label>
-                            <label>
-                                Wilt u een kraangat?
-                                <select
+                                    <Option value="ja">Ja</Option>
+                                    <Option value="nee">Nee</Option>
+                                </Select>
+                            </Form.Item>
+                            <Form.Item label="Wilt u een kraangat?">
+                                <Select
                                     value={bestelling?.kraangat ? "ja" : "nee"}
-                                    onChange={(e) => updateBestellingAttribute("kraangat", e.target.value === "ja")}
+                                    onChange={(value) => updateBestellingAttribute("kraangat", value === "ja")}
+                                    style={{ width: '70%' }}
                                 >
-                                    <option value="ja">Ja</option>
-                                    <option value="nee">Nee</option>
-                                </select>
-                            </label>
-                            <label>
-                                Wilt u een zeepdispenser?
-                                <select
+                                    <Option value="ja">Ja</Option>
+                                    <Option value="nee">Nee</Option>
+                                </Select>
+                            </Form.Item>
+                            <Form.Item label="Wilt u een zeepdispenser?">
+                                <Select
                                     value={bestelling?.zeepdispenser ? "ja" : "nee"}
-                                    onChange={(e) => updateBestellingAttribute("zeepdispenser", e.target.value === "ja")}
+                                    onChange={(value) => updateBestellingAttribute("zeepdispenser", value === "ja")}
+                                    style={{ width: '70%' }}
                                 >
-                                    <option value="ja">Ja</option>
-                                    <option value="nee">Nee</option>
-                                </select>
-                            </label>
+                                    <Option value="ja">Ja</Option>
+                                    <Option value="nee">Nee</Option>
+                                </Select>
+                            </Form.Item>
                             {bestelling?.boorgaten && (
                                 <>
-                                    <label>
-                                        Voer het aantal boorgaten in:
-                                        <input
-                                            type="number"
+                                    <Form.Item label="Voer het aantal boorgaten in:">
+                                        <InputNumber
                                             value={bestelling?.boorgaten_stuk}
-                                            onChange={(e) => updateBestellingAttribute("boorgaten_stuk", parseFloat(e.target.value))}
-                                            min="0"
-                                            step="1"
+                                            onChange={(value) => updateBestellingAttribute("boorgaten_stuk", value || 0)}
+                                            min={0}
+                                            step={1}
+                                            style={{ width: '100%' }}
                                         />
-                                    </label>
-                                    <label>
-                                        Voer de diameter van de boorgaten in (mm):
-                                        <input
-                                            type="number"
+                                    </Form.Item>
+                                    <Form.Item label="Voer de diameter van de boorgaten in (mm):">
+                                        <InputNumber
                                             value={bestelling?.boorgaten_mm}
-                                            onChange={(e) => updateBestellingAttribute("boorgaten_mm", parseFloat(e.target.value))}
-                                            min="0"
-                                            step="1"
+                                            onChange={(value) => updateBestellingAttribute("boorgaten_mm", value || 0)}
+                                            min={0}
+                                            step={1}
+                                            style={{ width: '100%' }}
                                         />
-                                    </label>
+                                    </Form.Item>
                                 </>
                             )}
                             {material?.wcd && (
-                                <label>
-                                    Wilt u een contactdoos?
-                                    <select
+                                <Form.Item label="Wilt u een contactdoos?">
+                                    <Select
                                         value={bestelling?.wcd ? "ja" : "nee"}
-                                        onChange={(e) => updateBestellingAttribute("wcd", e.target.value === "ja")}
+                                        onChange={(value) => updateBestellingAttribute("wcd", value === "ja")}
+                                        style={{ width: '100%' }}
                                     >
-                                        <option value="ja">Ja</option>
-                                        <option value="nee">Nee</option>
-                                    </select>
-                                </label>
+                                        <Option value="ja">Ja</Option>
+                                        <Option value="nee">Nee</Option>
+                                    </Select>
+                                </Form.Item>
                             )}
                             {material?.randafwerking && (
-                                <label>
-                                    Voer het aantal vierkante meters achterwand in:
-                                    <input
-                                        type="number"
+                                <Form.Item label="Voer het aantal vierkante meters achterwand in:">
+                                    <InputNumber
                                         value={bestelling?.achterwand_m2}
-                                        onChange={(e) => updateBestellingAttribute("achterwand_m2", parseFloat(e.target.value))}
-                                        min="0"
-                                        step="0.01"
+                                        onChange={(value) => updateBestellingAttribute("achterwand_m2", value || 0)}
+                                        min={0}
+                                        step={0.01}
+                                        style={{ width: '100%' }}
                                     />
-                                </label>
+                                </Form.Item>
                             )}
-                            <Button key="See Modal" onClick={handleShowInfo}>
-                                Vraag aan
-                            </Button>,
-                             
-                        </form>
-                    </div>
-                    <div className={"col-sm"}>
+                            <Form.Item>
+                                <Button type="primary" onClick={handleShowInfo} block>
+                                    Vraag aan
+                                </Button>
+                            </Form.Item>
+                        </Form>
+                    </Col>
+                    <Col span={11} style={{ marginTop: '66px'}}>
+
                         <TableView viewObject={bestelling} />
+                    </Col>
+                  
+                </Row>
+                <Modal
+                    title="Aanvraag"
+                    open={isViewModalVisible}
+                    onCancel={handleViewModalClose}
+                    width={600}
+                    footer={[
+                        <Button key="final" type="primary" onClick={handleModalSubmit}>
+                            Rond bestelling af
+                        </Button>,
+                        <Button key="close" onClick={handleViewModalClose}>
+                            Terug
+                        </Button>,
+                    ]}
+                >
+                    <div>
+                        <p><strong>Weet u zeker dat u uw bestelling wilt afronden?</strong></p>
                     </div>
-                    <Modal
-                        title="Aanvraag"
-                        open={isViewModalVisible}
-                        onCancel={handleViewModalClose}
-                        width={600}
-                        footer={[
-                            <Button key="final" type="primary"  onClick={handleModalSubmit}>
-                                Rond bestelling af
-                            </Button>,
-                            
-                            <Button key="close" onClick={handleViewModalClose}>
-                                Terug
-                            </Button>,
-                        ]}
-                    >
-
-                        <div>
-
-                            <p><strong>Weet u zeker dat u uw bestelling wilt afronden?</strong> </p>
-                        </div>
-
-                    </Modal>
-                </div>
+                </Modal>
             </div>
         </>
     );
