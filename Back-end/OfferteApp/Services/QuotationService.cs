@@ -130,14 +130,14 @@ public class QuotationService(DatabaseContext context, IConfiguration configurat
             document.Info.Title = "Blis Digital";
             var page = document.AddPage();
             var gfx = XGraphics.FromPdfPage(page);
-            var font = new XFont("Arial", 12, XFontStyle.Bold);
+            var font = new XFont("Arial", 12);
 
 
             gfx.DrawString("Blis Digital", font, XBrushes.Black, new XRect(0, 20, page.Width, 0), XStringFormats.TopCenter);
-            gfx.DrawString($"ID: {rand.next(100, 100000)}", font, XBrushes.Black, new XRect(0, 40, page.Width, 0), XStringFormats.TopCenter);
+            gfx.DrawString($"ID: {rand.Next(100, 100000)}", font, XBrushes.Black, new XRect(0, 40, page.Width, 0), XStringFormats.TopCenter);
 
 
-            font = new XFont("Arial", 10, XFontStyle.Bold);
+            font = new XFont("Arial", 10);
             gfx.DrawString("Item", font, XBrushes.Black, new XRect(40, 60, 200, 20), XStringFormats.TopLeft);
             gfx.DrawString("Amount", font, XBrushes.Black, new XRect(240, 60, 100, 20), XStringFormats.TopLeft);
             gfx.DrawString("Price", font, XBrushes.Black, new XRect(340, 60, 100, 20), XStringFormats.TopLeft);
