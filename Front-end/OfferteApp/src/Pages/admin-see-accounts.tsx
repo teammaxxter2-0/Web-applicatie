@@ -43,6 +43,7 @@ function AdminSeeAccounts() {
       if (response.ok) {
         const data = await response.json();
         setUsers(data);
+        console.log(users);
         setLoading(false);
       } else {
         setError('Gefaald om data te fetchen');
@@ -224,17 +225,11 @@ function AdminSeeAccounts() {
     {
       title: 'Gebruikersnaam',
       dataIndex: 'username',
-      key: 'userName',
+      key: 'username',
       width: '30%',
-      ...getColumnSearchProps('userName'),
+      ...getColumnSearchProps('username'),
     },
-    {
-      title: 'Wachtwoord',
-      dataIndex: 'password',
-      key: 'password',
-      width: '30%',
-      ...getColumnSearchProps('userName'),
-    },
+   
     {
       title: 'Telefoon Nummer',
       dataIndex: 'phoneNumber',
@@ -299,8 +294,7 @@ function AdminSeeAccounts() {
         {selectedUser && (
           <div>
             <p><strong>Id:</strong> {selectedUser.id}</p>
-            <p><strong>Gebruikersnaam:</strong> {selectedUser.userName}</p>
-            <p><strong>Wachtwoord:</strong> {selectedUser.password}</p>
+            <p><strong>Gebruikersnaam:</strong> {selectedUser.username}</p>
             <p><strong>Telefoon Nummer:</strong> {selectedUser.phoneNumber}</p>
           </div>
         )}
@@ -325,11 +319,8 @@ function AdminSeeAccounts() {
             <Form.Item name="id" label="Id">
               <Input disabled />
             </Form.Item>
-            <Form.Item name="username" label="Gebruikersnaam" rules={[{ required: true, message: 'Voer de Gebruiker!' }]}>
-              <Input />
-            </Form.Item>
-            <Form.Item name="password" label="Wachtwoord" rules={[{ required: true, message: 'Voer het wachtwoord in!' }]}>
-              <Input />
+            <Form.Item name="username" label="Gebruikersnaam">
+              <Input disabled />
             </Form.Item>
             <Form.Item name="phoneNumber" label="Telefoon Nummer" rules={[{ required: true, message: 'Voer de telefoonsnummer in!' }]}>
               <Input />
