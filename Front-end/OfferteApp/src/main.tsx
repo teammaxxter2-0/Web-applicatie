@@ -10,7 +10,6 @@ import App from './Pages/App.tsx'
 import ErrorPage from "./Pages/error-page.tsx"
 import Chatbot from './Pages/chatbot.tsx';
 import Catalog from './Pages/catalog.tsx';
-import Winkelwagen from './Pages/winkelwagen.tsx';
 import LogIn from './Pages/login.tsx';
 import BerekenBlad from "./Pages/Berekenblad.tsx";
 import AdminSeeMaterials from './Pages/admin-see-materials.tsx';
@@ -25,7 +24,6 @@ const router = createBrowserRouter(
             <Route index element={<App />}></Route>
             <Route path={"chatbot"} element={<Chatbot />}></Route>
             <Route path={"catalog"} element={<Catalog />}></Route>
-            <Route path={"winkelwagen"} element={<Winkelwagen />}></Route>
             <Route path={"login"} element={<LogIn />}></Route>
             <Route path={"berekenblad/:id"} element={<BerekenBlad />}></Route>
             <Route path={"beheerder"}>
