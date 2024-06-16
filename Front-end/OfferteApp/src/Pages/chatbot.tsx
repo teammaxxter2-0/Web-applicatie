@@ -4,18 +4,21 @@ import { marked } from "marked";
 import sanitizeHtml from "sanitize-html";
 import { Bestelling } from "../interfaces/Bestelling.ts";
 import TableView from "../Components/TableView.tsx";
+import '../Styles/chat.css'
 
 function Chatbot() {
     const [inputValue, setInputValue] = useState('');
     const [messages, setMessages] = useState([
-        'Assistent: Hallo! Hoe kan ik je vandaag helpen met betrekking tot onze keukenbladen?'
+        getTime() + ' - Assistent: Hallo! Hoe kan ik je vandaag helpen met betrekking tot onze keukenbladen?'
     ]);
+    const [loadingMessage, setLoadingMessage] = useState('');
     const [infoTable, setInfoTable] = useState<Bestelling>();
 
     async function sendData(e: React.FormEvent<HTMLFormElement>): Promise<void> {
         e.preventDefault();
         appendUserMessage(inputValue);
         setInputValue('');
+        setLoadingMessage('...');
 
         const threadId = localStorage.getItem('threadId');
         const url = threadId ? `ai/chat/${threadId}` : 'ai/chat';
@@ -29,12 +32,14 @@ function Chatbot() {
         if (response.ok) {
             const assistant = await response.json();
             const message = JSON.parse(assistant.message);
+            setLoadingMessage('');
             appendBotMessage(message.assistant.message);
             updateInfoTable(message.materiaalInformatie);
             if (assistant.threadId !== undefined) {
                 localStorage.setItem('threadId', assistant.threadId);
             }
         } else {
+            setLoadingMessage('');
             appendBotMessage('Failed to send data');
         }
         setInputValue('');
@@ -68,7 +73,7 @@ function Chatbot() {
     return (
         <>
             <Navbar />
-            <div className="input-container" id="logContainer">
+            <div className="chat-container">
                 <h2>KeukenGPT</h2>
                 <form onSubmit={sendData} autoComplete={"off"}>
                     <input
@@ -81,6 +86,9 @@ function Chatbot() {
                 </form>
                 <hr />
                 <div className="output-box" id="outputBox">
+                    {loadingMessage && (
+                        <div className="log-container">{`${getTime()} - Assistent: ${loadingMessage}`}</div>
+                    )}
                     {messages.map((message, index) => (
                         <div
                             key={index}

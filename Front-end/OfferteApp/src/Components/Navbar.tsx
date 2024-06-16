@@ -1,14 +1,18 @@
-import { Link } from 'react-router-dom';
+import { Link , useNavigate } from 'react-router-dom';
 import {Button} from "reactstrap";
 import {useState} from "react";
 import {message} from "antd";
 
+
 function Navbar() {
+    const navigate = useNavigate();
     const [loggedIn, setLoggedIn] = useState(localStorage.getItem('token') !== null);
     const logout = () => {
         setLoggedIn(false);
         localStorage.clear();
+        
         message.success("Logged out successfully");
+        navigate("/")
     }
     return (
         <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
