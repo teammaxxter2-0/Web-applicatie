@@ -39,9 +39,6 @@ function App() {
                         <Button style={{ width: '200px' }} onClick={() => navigate('/chatbot')}>
                             Chatbot
                         </Button>
-                        <Button style={{ width: '200px' }} onClick={() => navigate('/winkelwagen')}>
-                            Winkelwagen
-                        </Button>
                         <Button style={{ width: '200px' }} onClick={() => navigate('/beheerder')}>
                             Beheer
                         </Button>
