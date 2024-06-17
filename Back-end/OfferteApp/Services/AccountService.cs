@@ -45,6 +45,7 @@ public class AccountService : ControllerBase
     {
         var user = _context.Accounts.FirstOrDefault(q => q.Id == id);
         if (user == null) return false;
+        if (user.Username == "admin") return false; // For live safety
         _context.Accounts.Remove(user);
         return _context.SaveChanges() > 0;
     }
